@@ -46,16 +46,16 @@ return {
         mappings = {
           ["<space>"] = "none",
           ["<C-h>"] = function()
-            vim.cmd("TmuxNavigateLeft")
+            vim.cmd("wincmd h")
           end,
           ["<C-l>"] = function()
-            vim.cmd("TmuxNavigateRight")
+            vim.cmd("wincmd l")
           end,
           ["<C-j>"] = function()
-            vim.cmd("TmuxNavigateDown")
+            vim.cmd("wincmd j")
           end,
           ["<C-k>"] = function()
-            vim.cmd("TmuxNavigateUp")
+            vim.cmd("wincmd k")
           end,
         },
       },
