@@ -22,13 +22,29 @@ return {
     { "<leader>fd", desc = "Diagnostics" },
     { "<leader>fc", desc = "Command history" },
   },
+  init = function()
+    local map = require("config.map")
+    local d = { group = "Find", docs = "navigation-cheatsheet.md" }
+    local function tb(name)
+      return function()
+        require("telescope.builtin")[name]()
+      end
+    end
+
+    map("n", "<leader>ff", tb("find_files"), vim.tbl_extend("force", d, { desc = "Find files" }))
+    map("n", "<leader>fg", tb("live_grep"), vim.tbl_extend("force", d, { desc = "Live grep" }))
+    map("n", "<leader>fr", tb("oldfiles"), vim.tbl_extend("force", d, { desc = "Recent files" }))
+    map("n", "<leader>fb", tb("buffers"), vim.tbl_extend("force", d, { desc = "Buffers" }))
+    map("n", "<leader>fh", tb("help_tags"), vim.tbl_extend("force", d, { desc = "Help tags" }))
+    map("n", "<leader>fs", tb("lsp_document_symbols"), vim.tbl_extend("force", d, { desc = "Document symbols" }))
+    map("n", "<leader>fw", tb("lsp_workspace_symbols"), vim.tbl_extend("force", d, { desc = "Workspace symbols" }))
+    map("n", "<leader>fd", tb("diagnostics"), vim.tbl_extend("force", d, { desc = "Diagnostics" }))
+    map("n", "<leader>fc", tb("command_history"), vim.tbl_extend("force", d, { desc = "Command history" }))
+  end,
   config = function()
     local shared = require("config.shared")
     local telescope = require("telescope")
     local actions = require("telescope.actions")
-    local map = require("config.map")
-    local b = require("telescope.builtin")
-    local d = { group = "Find", docs = "navigation-cheatsheet.md" }
 
     telescope.setup({
       defaults = {
@@ -46,22 +62,15 @@ return {
             ["<C-k>"] = actions.move_selection_previous,
             ["<C-j>"] = actions.move_selection_next,
             ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+          },
+          n = {
             ["<Esc>"] = actions.close,
+            ["q"] = actions.close,
           },
         },
       },
     })
 
     pcall(telescope.load_extension, "fzf")
-
-    map("n", "<leader>ff", b.find_files, vim.tbl_extend("force", d, { desc = "Find files" }))
-    map("n", "<leader>fg", b.live_grep, vim.tbl_extend("force", d, { desc = "Live grep" }))
-    map("n", "<leader>fr", b.oldfiles, vim.tbl_extend("force", d, { desc = "Recent files" }))
-    map("n", "<leader>fb", b.buffers, vim.tbl_extend("force", d, { desc = "Buffers" }))
-    map("n", "<leader>fh", b.help_tags, vim.tbl_extend("force", d, { desc = "Help tags" }))
-    map("n", "<leader>fs", b.lsp_document_symbols, vim.tbl_extend("force", d, { desc = "Document symbols" }))
-    map("n", "<leader>fw", b.lsp_workspace_symbols, vim.tbl_extend("force", d, { desc = "Workspace symbols" }))
-    map("n", "<leader>fd", b.diagnostics, vim.tbl_extend("force", d, { desc = "Diagnostics" }))
-    map("n", "<leader>fc", b.command_history, vim.tbl_extend("force", d, { desc = "Command history" }))
   end,
 }

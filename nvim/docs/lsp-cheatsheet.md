@@ -46,7 +46,6 @@ signature and source location without navigating.
 
 Servers are installed and managed by Mason. Run `:Mason` to view and install servers.
 
-Rust uses `rustaceanvim` (Phase 8) instead of plain `lspconfig` — do not configure `rust_analyzer`
-separately.
+Rust uses `rustaceanvim` instead of plain `lspconfig` — do not configure `rust_analyzer` separately.
 
 Defined in `lua/lsp/init.lua`, `lua/lsp/handlers.lua`, and `lua/lsp/servers/*.lua`.

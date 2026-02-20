@@ -35,8 +35,8 @@ jobs:
       - name: Run luacheck
         run: luacheck nvim/lua/ --config .luacheckrc
 
-  load-test:
-    name: Config load test
+  integration:
+    name: Integration test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -46,6 +46,10 @@ jobs:
         with:
           neovim: true
           version: stable
+
+      - name: Install tree-sitter CLI
+        run: |
+          npm install -g tree-sitter-cli
 
       - name: Link config
         run: |
@@ -58,5 +62,24 @@ jobs:
             https://github.com/folke/lazy.nvim.git \
             "$HOME/.local/share/nvim/lazy/lazy.nvim"
 
+      - name: Sync plugins
+        run: |
+          nvim --headless "+Lazy! sync" +qa 2>&1
+        timeout-minutes: 5
+
       - name: Test config loads
         run: nvim --headless "+lua print('Config OK')" +qa
+
+      - name: Run keymap spec
+        run: |
+          nvim --headless -c "luafile test/keymap_spec.lua"
+        timeout-minutes: 1
+
+      - name: Run health check
+        run: |
+          nvim --headless "+lua require('config.health').check()" +qa 2>&1 | tee /tmp/health.log
+          if grep -q "ERROR" /tmp/health.log; then
+            echo "::error::Health check found errors"
+            cat /tmp/health.log
+            exit 1
+          fi

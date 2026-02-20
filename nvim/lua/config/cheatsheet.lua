@@ -175,7 +175,6 @@ function M.open()
   pickers
     .new({}, {
       prompt_title = "Keybindings  ·  Enter → preview source  ·  Ctrl-d → docs",
-      initial_mode = "normal",
       previewer = false,
       finder = finders.new_table({
         results = deduped,
@@ -215,9 +214,6 @@ function M.open()
           end
         end
 
-        map("i", "<Esc>", function()
-          vim.cmd("stopinsert")
-        end)
         map("i", "<C-d>", function()
           open_docs(prompt_bufnr)
         end)

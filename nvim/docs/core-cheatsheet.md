@@ -4,12 +4,13 @@
 
 Leader key is `<Space>`.
 
-### Scrolling & search
+### Search & scrolling
 
 | Key               | Action                                       |
 | ----------------- | -------------------------------------------- |
+| `/`               | Search forward (inline at cursor position)   |
+| `n` / `N`         | Next / prev search match (centered with zz)  |
 | `<C-d>` / `<C-u>` | Scroll half page down / up (cursor centered) |
-| `n` / `N`         | Next / prev search match (centered)          |
 
 ### Editing
 
@@ -47,10 +48,13 @@ Leader key is `<Space>`.
 
 ### General
 
-| Key | Action                                 |
-| --- | -------------------------------------- |
-| `?` | Open keybinding cheatsheet             |
+| Key | Action |
+|-----|--------|
+| `?` | Open keybinding cheatsheet |
 | `Q` | Disabled (prevents accidental Ex mode) |
+| `<leader>u` | Toggle undo tree |
+| `<leader>gt` | Floating terminal |
+| `<leader>cf` | Format entire project (with confirmation) |
 
 ## About
 

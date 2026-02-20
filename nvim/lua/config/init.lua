@@ -1,3 +1,13 @@
 require("config.options")
 require("config.keymaps")
 require("config.autocmds")
+
+vim.api.nvim_create_user_command("Tutorial", function()
+  require("config.tutorial").start()
+end, {})
+vim.api.nvim_create_user_command("TutorialNext", function()
+  require("config.tutorial").next()
+end, {})
+vim.api.nvim_create_user_command("TutorialPrev", function()
+  require("config.tutorial").prev()
+end, {})

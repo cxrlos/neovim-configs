@@ -8,11 +8,10 @@ aesthetic — drawing from ThePrimeagen's workflow with the Rose Pine color sche
 
 - **Theme** — [Rose Pine](https://github.com/rose-pine/neovim) dark
 - **Navigation** — Telescope (fuzzy find), Harpoon v2 (active file pinning), neo-tree (sidebar), oil.nvim (filesystem as a buffer)
-- **LSP & completion** — mason + nvim-lspconfig + blink.cmp covering Rust, TypeScript, Python, Terraform, Docker, GH Actions, Markdown, Lua
+- **LSP & completion** — mason + nvim-lspconfig + blink.cmp covering Rust, TypeScript, Python, Terraform, Docker, YAML, Markdown, Lua
 - **Treesitter** — syntax highlighting, text objects, sticky context header
-- **Git** — gitsigns (inline hunks/blame) + lazygit (floating terminal)
-- **AI** — Claude via codecompanion.nvim, on-demand only — no autocomplete
-- **Formatting** — conform.nvim, respects each project's own config (`.prettierrc`, `biome.json`, `rustfmt.toml`, etc.)
+- **Git** — gitsigns (inline blame with age coloring, hunk ops, commit info with GitHub links)
+- **Formatting** — conform.nvim, respects each project's own config (`.prettierrc`, `rustfmt.toml`, etc.)
 - **Cheatsheet** — press `?` for a searchable keybinding picker with source preview
 - **Markdown** — inline rendering + browser preview with Mermaid support
 
@@ -22,7 +21,6 @@ See [`nvim/docs/`](nvim/docs/) for per-topic documentation.
 
 - macOS (the install script targets Homebrew; other platforms require manual setup)
 - [Hack Nerd Font Mono](https://www.nerdfonts.com/) or any Nerd Font with Powerline symbols
-- A Claude API key (for AI features — optional, everything else works without it)
 
 ## Install
 

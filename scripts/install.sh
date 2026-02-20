@@ -59,7 +59,7 @@ fi
 
 # ── Dependencies ──────────────────────────────────────────────────────────────
 
-BREW_DEPS=(lazygit ripgrep fd node python3 rustup-init tree-sitter tree-sitter@0.25)
+BREW_DEPS=(ripgrep fd node python3 rustup-init tree-sitter tree-sitter@0.25)
 for dep in "${BREW_DEPS[@]}"; do
     if brew list "$dep" &>/dev/null 2>&1; then
         success "$dep"
@@ -96,8 +96,6 @@ fi
 info "Installing plugins (may take a minute on first run)..."
 nvim --headless "+Lazy! sync" +qa 2>/dev/null
 success "Plugins ready"
-
-# ── Treesitter parsers ────────────────────────────────────────────────────────
 
 # ── Markdown preview build ────────────────────────────────────────────────────
 
