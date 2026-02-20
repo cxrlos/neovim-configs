@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  format:
+    name: Lua format check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check formatting with stylua
+        uses: JohnnyMorganz/stylua-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: latest
+          args: --check nvim/ templates/
+
+  lint:
+    name: Lua lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install luacheck
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y luarocks
+          sudo luarocks install luacheck
+
+      - name: Run luacheck
+        run: luacheck nvim/lua/ --config .luacheckrc
+
+  load-test:
+    name: Config load test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Neovim
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: stable
+
+      - name: Link config
+        run: |
+          mkdir -p "$HOME/.config"
+          ln -sf "$(pwd)/nvim" "$HOME/.config/nvim"
+
+      - name: Bootstrap lazy.nvim
+        run: |
+          git clone --filter=blob:none --branch=stable \
+            https://github.com/folke/lazy.nvim.git \
+            "$HOME/.local/share/nvim/lazy/lazy.nvim"
+
+      - name: Test config loads
+        run: nvim --headless "+lua print('Config OK')" +qa

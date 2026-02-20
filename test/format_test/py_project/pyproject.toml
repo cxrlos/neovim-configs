@@ -1,0 +1,10 @@
+[project]
+name = "format-test"
+version = "0.1.0"
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

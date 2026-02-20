@@ -1,0 +1,45 @@
+# Agentic dev folder
+.ai/
+
+# Neovim runtime artifacts
+nvim/spell/
+nvim/undo/
+*.log
+.netrwhist
+
+# Lua compiled
+*.luac
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+Icon
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# Cursor IDE
+.cursor/
+.cursorignore
+.cursorindexingignore
+
+# Claude Code
+.claude/
+CLAUDE.md
