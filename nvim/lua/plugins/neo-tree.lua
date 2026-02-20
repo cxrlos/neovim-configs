@@ -45,17 +45,17 @@ return {
         width = 35,
         mappings = {
           ["<space>"] = "none",
-          ["<leader>h"] = function()
-            vim.cmd("wincmd h")
+          ["<C-h>"] = function()
+            vim.cmd("TmuxNavigateLeft")
           end,
-          ["<leader>l"] = function()
-            vim.cmd("wincmd l")
+          ["<C-l>"] = function()
+            vim.cmd("TmuxNavigateRight")
           end,
-          ["<leader>j"] = function()
-            vim.cmd("wincmd j")
+          ["<C-j>"] = function()
+            vim.cmd("TmuxNavigateDown")
           end,
-          ["<leader>k"] = function()
-            vim.cmd("wincmd k")
+          ["<C-k>"] = function()
+            vim.cmd("TmuxNavigateUp")
           end,
         },
       },

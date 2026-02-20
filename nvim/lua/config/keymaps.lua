@@ -36,11 +36,6 @@ map("n", "?", function()
   require("config.cheatsheet").open()
 end, { desc = "Keybinding cheatsheet", group = "General", docs = "core-cheatsheet.md" })
 
-map("n", "<leader>h", "<C-w><C-h>", { desc = "Focus left window", group = "Windows", docs = "core-cheatsheet.md" })
-map("n", "<leader>l", "<C-w><C-l>", { desc = "Focus right window", group = "Windows", docs = "core-cheatsheet.md" })
-map("n", "<leader>j", "<C-w><C-j>", { desc = "Focus lower window", group = "Windows", docs = "core-cheatsheet.md" })
-map("n", "<leader>k", "<C-w><C-k>", { desc = "Focus upper window", group = "Windows", docs = "core-cheatsheet.md" })
-
 map(
   "n",
   "<C-Up>",

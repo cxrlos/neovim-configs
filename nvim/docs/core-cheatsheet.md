@@ -28,10 +28,10 @@ Leader key is `<Space>`.
 
 ### Window navigation
 
-| Key               | Action                                |
-| ----------------- | ------------------------------------- |
-| `<leader>h/j/k/l` | Focus left / down / up / right window |
-| `<C-↑↓←→>`        | Resize window                         |
+| Key               | Action                                        |
+| ----------------- | --------------------------------------------- |
+| `<C-h/j/k/l>`    | Navigate left / down / up / right (vim + tmux) |
+| `<C-↑↓←→>`        | Resize window                                  |
 
 ### Quickfix
 
