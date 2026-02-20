@@ -61,7 +61,6 @@ return {
             "git -C " .. vim.fn.shellescape(dir) .. " blame --date=short " .. vim.fn.shellescape(file) .. " 2>/dev/null"
           )
 
-          local now = os.time()
           local dates = {}
           local entries = {}
 

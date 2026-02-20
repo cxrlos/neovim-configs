@@ -56,7 +56,6 @@ return {
           for _, file in ipairs(files) do
             local buf = vim.fn.bufadd(file)
             vim.fn.bufload(buf)
-            local ft = vim.filetype.match({ buf = buf, filename = file }) or ""
             local formatters = conform.list_formatters_for_buffer(buf)
 
             if #formatters > 0 then
