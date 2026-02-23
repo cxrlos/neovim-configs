@@ -48,7 +48,7 @@ return {
         vim.api.nvim_set_hl(0, "BlameAge4", { fg = "#6e6a86", italic = true })
         vim.api.nvim_set_hl(0, "BlameAge5", { fg = "#56526e", italic = true })
 
-        map("n", "gb", function()
+        map("n", "<leader>gb", function()
           blame_active = not blame_active
           vim.api.nvim_buf_clear_namespace(bufnr, blame_ns, 0, -1)
           if not blame_active then

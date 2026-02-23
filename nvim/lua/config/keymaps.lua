@@ -18,18 +18,6 @@ map(
   { desc = "Paste without overwriting", group = "Clipboard", docs = "core-cheatsheet.md" }
 )
 
-map(
-  { "n", "v" },
-  "<leader>y",
-  [["+y]],
-  { desc = "Yank to system clipboard", group = "Clipboard", docs = "core-cheatsheet.md" }
-)
-map(
-  "n",
-  "<leader>Y",
-  [["+Y]],
-  { desc = "Yank line to system clipboard", group = "Clipboard", docs = "core-cheatsheet.md" }
-)
 
 map("n", "Q", "<nop>")
 map("n", "?", function()
@@ -38,25 +26,25 @@ end, { desc = "Keybinding cheatsheet", group = "General", docs = "core-cheatshee
 
 map(
   "n",
-  "<C-Up>",
+  "<M-k>",
   "<cmd>resize +2<CR>",
   { desc = "Increase window height", group = "Windows", docs = "core-cheatsheet.md" }
 )
 map(
   "n",
-  "<C-Down>",
+  "<M-j>",
   "<cmd>resize -2<CR>",
   { desc = "Decrease window height", group = "Windows", docs = "core-cheatsheet.md" }
 )
 map(
   "n",
-  "<C-Left>",
+  "<M-h>",
   "<cmd>vertical resize -2<CR>",
   { desc = "Decrease window width", group = "Windows", docs = "core-cheatsheet.md" }
 )
 map(
   "n",
-  "<C-Right>",
+  "<M-l>",
   "<cmd>vertical resize +2<CR>",
   { desc = "Increase window width", group = "Windows", docs = "core-cheatsheet.md" }
 )
@@ -79,7 +67,7 @@ map(
   { desc = "Location list prev", group = "Location List", docs = "core-cheatsheet.md" }
 )
 
-map("n", "<leader>gt", function()
+map("n", "<leader>t", function()
   local buf = vim.api.nvim_create_buf(false, true)
   local width = math.floor(vim.o.columns * 0.85)
   local height = math.floor(vim.o.lines * 0.8)

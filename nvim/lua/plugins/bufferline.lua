@@ -44,13 +44,6 @@ return {
       vim.tbl_extend("force", d, { desc = "Close other buffers" })
     )
     map("n", "<leader>ba", "<cmd>bufdo bdelete<CR>", vim.tbl_extend("force", d, { desc = "Close all buffers" }))
-    map("n", "<leader>bp", "<cmd>BufferLinePick<CR>", vim.tbl_extend("force", d, { desc = "Pick buffer" }))
-    map(
-      "n",
-      "<leader>bD",
-      "<cmd>BufferLinePickClose<CR>",
-      vim.tbl_extend("force", d, { desc = "Pick buffer to close" })
-    )
     map("n", "<leader>b<", "<cmd>BufferLineMovePrev<CR>", vim.tbl_extend("force", d, { desc = "Move buffer left" }))
     map("n", "<leader>b>", "<cmd>BufferLineMoveNext<CR>", vim.tbl_extend("force", d, { desc = "Move buffer right" }))
 

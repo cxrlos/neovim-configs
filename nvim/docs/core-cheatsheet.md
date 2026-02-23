@@ -21,17 +21,16 @@ Leader key is `<Space>`.
 
 ### Clipboard
 
-| Key                       | Action                                    |
-| ------------------------- | ----------------------------------------- |
-| `<leader>y` / `<leader>Y` | Yank selection / line to system clipboard |
-| `<leader>p` (visual)      | Paste without overwriting register        |
+| Key                  | Action                             |
+| -------------------- | ---------------------------------- |
+| `<leader>p` (visual) | Paste without overwriting register |
 
 ### Window navigation
 
 | Key               | Action                                        |
 | ----------------- | --------------------------------------------- |
 | `<C-h/j/k/l>`    | Navigate left / down / up / right (vim + tmux) |
-| `<C-↑↓←→>`        | Resize window                                  |
+| `<M-h/j/k/l>`    | Resize window (Alt + hjkl)                      |
 
 ### Quickfix
 
@@ -53,13 +52,13 @@ Leader key is `<Space>`.
 | `?` | Open keybinding cheatsheet |
 | `Q` | Disabled (prevents accidental Ex mode) |
 | `<leader>u` | Toggle undo tree |
-| `<leader>gt` | Floating terminal |
-| `<leader>cf` | Format entire project (with confirmation) |
+| `<leader>t` | Floating terminal |
+| `<leader>F` | Format entire project (with confirmation) |
 
 ## About
 
 Core keymaps are defined in `lua/config/keymaps.lua`. They are non-plugin, always-available bindings.
 
-Window navigation mirrors the standard `<C-w>h/j/k/l` motions but using the leader key for consistency with the rest of the config. The `<C-hjkl>` variants were intentionally removed to keep a single navigation paradigm.
+Window navigation uses `<C-h/j/k/l>`, shared with tmux via vim-tmux-navigator for seamless pane/window switching without a prefix.
 
-Clipboard operations use explicit `"+` register yanking rather than setting `clipboard=unnamedplus` globally, which avoids slowdowns on systems where clipboard access is slow.
+System clipboard is global via `clipboard=unnamedplus` — all yanks go to the OS clipboard automatically. `<leader>p` in visual mode pastes without clobbering the unnamed register.

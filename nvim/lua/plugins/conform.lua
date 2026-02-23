@@ -33,7 +33,7 @@ return {
       },
     })
 
-    map("n", "<leader>cf", function()
+    map("n", "<leader>F", function()
       local cwd = vim.fn.getcwd()
       vim.ui.select(
         { "Yes — format all", "No — cancel" },
@@ -118,6 +118,6 @@ return {
           end, { buffer = buf })
         end
       )
-    end, { desc = "Format entire project", group = "Code", docs = "core-cheatsheet.md" })
+    end, { desc = "Format entire project", group = "General", docs = "core-cheatsheet.md" })
   end,
 }

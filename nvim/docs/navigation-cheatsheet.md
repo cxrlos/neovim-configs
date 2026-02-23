@@ -24,7 +24,7 @@ Inside Telescope: `<C-j>/<C-k>` to move, `<C-q>` to send to quickfix, `<Esc>` to
 | ------------------------- | -------------------------------- |
 | `<leader>e`               | Toggle file tree sidebar         |
 | `<leader>E`               | Reveal current file in tree      |
-| `<leader>h` / `<leader>l` | Exit tree to left / right window |
+| `<C-h>` / `<C-l>`         | Exit tree to left / right window |
 
 ### Oil (filesystem as buffer)
 
