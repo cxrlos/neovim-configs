@@ -36,6 +36,7 @@ opt.updatetime = 50
 opt.timeoutlen = 300
 
 opt.mouse = "a"
+opt.clipboard = "unnamedplus"
 opt.completeopt = "menu,menuone,noselect"
 opt.conceallevel = 0
 opt.fileencoding = "utf-8"
