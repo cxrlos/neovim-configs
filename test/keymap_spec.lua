@@ -2,22 +2,20 @@ vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
     vim.defer_fn(function()
       local always = {
-        { mode = "n", raw = "<leader>ff", desc = "Find files" },
-        { mode = "n", raw = "<leader>fg", desc = "Live grep" },
-        { mode = "n", raw = "<leader>fr", desc = "Recent files" },
-        { mode = "n", raw = "<leader>fb", desc = "Buffers" },
         { mode = "n", raw = "<leader>pa", desc = "Harpoon add file" },
         { mode = "n", raw = "<leader>pp", desc = "Harpoon menu" },
         { mode = "n", raw = "<leader>1", desc = "Harpoon file 1" },
         { mode = "n", raw = "<leader>qn", desc = "Quickfix next" },
-        { mode = "n", raw = "<leader>y", desc = "Yank to system clipboard" },
-        { mode = "n", raw = "<leader>Y", desc = "Yank line to system clipboard" },
         { mode = "n", raw = "<leader>u", desc = "Undo history" },
-        { mode = "n", raw = "<leader>gt", desc = "Floating terminal" },
+        { mode = "n", raw = "<leader>t", desc = "Floating terminal" },
         { mode = "n", raw = "?", desc = "Keybinding cheatsheet" },
       }
 
       local lazy_loaded = {
+        { mode = "n", raw = "<leader>ff", desc = "Find files", plugin = "telescope.nvim" },
+        { mode = "n", raw = "<leader>fg", desc = "Live grep", plugin = "telescope.nvim" },
+        { mode = "n", raw = "<leader>fr", desc = "Recent files", plugin = "telescope.nvim" },
+        { mode = "n", raw = "<leader>fb", desc = "Buffers", plugin = "telescope.nvim" },
         { mode = "n", raw = "<leader>e", desc = "Toggle file tree", plugin = "neo-tree" },
         { mode = "n", raw = "<leader>E", desc = "Reveal file in tree", plugin = "neo-tree" },
         { mode = "n", raw = "<leader>bd", desc = "Close buffer", plugin = "bufferline" },

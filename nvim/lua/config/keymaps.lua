@@ -18,7 +18,6 @@ map(
   { desc = "Paste without overwriting", group = "Clipboard", docs = "core-cheatsheet.md" }
 )
 
-
 map("n", "Q", "<nop>")
 map("n", "?", function()
   require("config.cheatsheet").open()
