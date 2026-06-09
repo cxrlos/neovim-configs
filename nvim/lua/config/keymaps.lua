@@ -18,6 +18,9 @@ map(
   { desc = "Paste without overwriting", group = "Clipboard", docs = "core-cheatsheet.md" }
 )
 
+map({ "n", "v" }, "<leader>y", [["+y]], { desc = "Yank to clipboard", group = "Clipboard", docs = "core-cheatsheet.md" })
+map("n", "<leader>Y", [["+Y]], { desc = "Yank line to clipboard", group = "Clipboard", docs = "core-cheatsheet.md" })
+
 map("n", "Q", "<nop>")
 map("n", "?", function()
   require("config.cheatsheet").open()
@@ -52,19 +55,6 @@ map("n", "<leader>qn", "<cmd>cnext<CR>zz", { desc = "Quickfix next", group = "Qu
 map("n", "<leader>qp", "<cmd>cprev<CR>zz", { desc = "Quickfix prev", group = "Quickfix", docs = "core-cheatsheet.md" })
 map("n", "<leader>qo", "<cmd>copen<CR>", { desc = "Quickfix open", group = "Quickfix", docs = "core-cheatsheet.md" })
 map("n", "<leader>qc", "<cmd>cclose<CR>", { desc = "Quickfix close", group = "Quickfix", docs = "core-cheatsheet.md" })
-
-map(
-  "n",
-  "<leader>ln",
-  "<cmd>lnext<CR>zz",
-  { desc = "Location list next", group = "Location List", docs = "core-cheatsheet.md" }
-)
-map(
-  "n",
-  "<leader>lp",
-  "<cmd>lprev<CR>zz",
-  { desc = "Location list prev", group = "Location List", docs = "core-cheatsheet.md" }
-)
 
 map("n", "<leader>t", function()
   local buf = vim.api.nvim_create_buf(false, true)
