@@ -17,16 +17,8 @@ return {
         root_markers = { ".git" },
       })
 
-      local servers = {
-        "lua_ls",
-        "pyright",
-        "terraformls",
-        "dockerls",
-        "yamlls",
-        "marksman",
-      }
-
-      for _, name in ipairs(servers) do
+      local servers_with_config = { "lua_ls", "pyright", "ts_ls" }
+      for _, name in ipairs(servers_with_config) do
         local ok, server_opts = pcall(require, "lsp.servers." .. name)
         if ok and type(server_opts) == "table" then
           vim.lsp.config(name, server_opts)
@@ -34,7 +26,16 @@ return {
       end
 
       require("mason-lspconfig").setup({
-        ensure_installed = vim.list_extend(vim.deepcopy(servers), { "ts_ls", "rust_analyzer" }),
+        ensure_installed = {
+          "lua_ls",
+          "pyright",
+          "ts_ls",
+          "rust_analyzer",
+          "terraformls",
+          "dockerls",
+          "yamlls",
+          "marksman",
+        },
         automatic_enable = {
           exclude = { "ts_ls", "rust_analyzer" },
         },

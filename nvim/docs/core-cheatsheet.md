@@ -39,12 +39,6 @@ Leader key is `<Space>`.
 | `<leader>qn` / `<leader>qp` | Quickfix next / prev  |
 | `<leader>qo` / `<leader>qc` | Quickfix open / close |
 
-### Location list
-
-| Key                         | Action                    |
-| --------------------------- | ------------------------- |
-| `<leader>ln` / `<leader>lp` | Location list next / prev |
-
 ### General
 
 | Key | Action |
@@ -53,7 +47,6 @@ Leader key is `<Space>`.
 | `Q` | Disabled (prevents accidental Ex mode) |
 | `<leader>u` | Toggle undo tree |
 | `<leader>t` | Floating terminal |
-| `<leader>F` | Format entire project (with confirmation) |
 
 ## About
 

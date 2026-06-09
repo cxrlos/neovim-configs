@@ -15,13 +15,6 @@ return {
         changedelete = { text = shared.icons.git.change },
       },
       current_line_blame = false,
-      current_line_blame_opts = {
-        virt_text = true,
-        virt_text_pos = "eol",
-        delay = 0,
-        virt_text_priority = 100,
-      },
-      current_line_blame_formatter = "  <author>, <author_time:%Y-%m-%d> · <summary>",
       on_attach = function(bufnr)
         local gs = package.loaded.gitsigns
         local o = { buffer = bufnr }
