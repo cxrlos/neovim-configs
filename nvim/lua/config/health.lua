@@ -24,7 +24,8 @@ local expected_plugins = {
   "fidget.nvim",
   "lazydev.nvim",
   "render-markdown.nvim",
-  "markdown-preview.nvim",
+  "claudecode.nvim",
+  "which-key.nvim",
 }
 
 local expected_servers = {
@@ -46,6 +47,8 @@ local expected_keymaps = {
   { mode = "n", lhs = " e" },
   { mode = "n", lhs = " bd" },
   { mode = "n", lhs = "?" },
+  { mode = "x", lhs = " as" },
+  { mode = "n", lhs = " at" },
 }
 
 function M.check()
@@ -118,6 +121,27 @@ function M.check()
     vim.health.ok("LspAttach autocmd registered")
   else
     vim.health.error("LspAttach autocmd NOT registered — on_attach will never fire")
+  end
+
+  vim.health.start("Claude Code bridge")
+  local cc_ok, claudecode = pcall(require, "claudecode")
+  if not cc_ok then
+    vim.health.error("claudecode not loaded")
+  else
+    local state = claudecode.state or {}
+    local server = state.server
+    if server and server.port then
+      vim.health.ok("WebSocket server listening on port " .. tostring(server.port))
+    else
+      vim.health.warn("WebSocket server not started — run :ClaudeCodeStart or check :ClaudeCodeStatus")
+    end
+    local ide_dir = (vim.env.CLAUDE_CONFIG_DIR or vim.fn.expand("~/.claude")) .. "/ide"
+    local locks = vim.fn.glob(ide_dir .. "/*.lock", false, true)
+    if #locks > 0 then
+      vim.health.ok(string.format("%d lock file(s) in %s", #locks, ide_dir))
+    else
+      vim.health.warn("No lock files in " .. ide_dir .. " — Claude can't auto-connect")
+    end
   end
 end
 

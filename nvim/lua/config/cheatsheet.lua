@@ -135,6 +135,7 @@ function M.open()
   local actions = require("telescope.actions")
   local action_state = require("telescope.actions.state")
 
+  local shared = require("config.shared")
   local keymaps = require("config.map").get_keymaps()
   local seen = {}
   local deduped = {}
@@ -147,28 +148,41 @@ function M.open()
         local copy = vim.tbl_extend("force", {}, km)
         copy.display_desc = base .. " N"
         copy.display_lhs = km.lhs:gsub("%d+$", "N")
+        copy.category = shared.category_for_group(km.group)
         table.insert(deduped, copy)
       end
     else
       local copy = vim.tbl_extend("force", {}, km)
       copy.display_desc = km.desc
       copy.display_lhs = km.lhs
+      copy.category = shared.category_for_group(km.group)
       table.insert(deduped, copy)
     end
   end
 
+  local category_rank = {}
+  for i, cat in ipairs(shared.category_order) do
+    category_rank[cat] = i
+  end
+
   table.sort(deduped, function(a, b)
-    if a.group == "General" and b.group ~= "General" then
-      return true
-    end
-    if a.group ~= "General" and b.group == "General" then
-      return false
+    local ra = category_rank[a.category] or 99
+    local rb = category_rank[b.category] or 99
+    if ra ~= rb then
+      return ra < rb
     end
     if a.group ~= b.group then
       return a.group < b.group
     end
     return a.display_lhs < b.display_lhs
   end)
+
+  local function set_picker_highlights()
+    for category, color in pairs(shared.category_color) do
+      vim.api.nvim_set_hl(0, "CheatsheetCat" .. category, { fg = color, bold = true })
+    end
+  end
+  set_picker_highlights()
 
   local mode_label = { n = "N", v = "V", x = "V" }
 
@@ -180,10 +194,15 @@ function M.open()
         results = deduped,
         entry_maker = function(entry)
           local m = mode_label[entry.mode] or entry.mode:upper()
+          local icon = shared.icons.category[entry.category] or shared.icons.category.general
+          local hl = "CheatsheetCat" .. entry.category
+          local display_text = string.format("%s  %-16s [%s] %-22s %s", icon, entry.group, m, entry.display_lhs, entry.display_desc)
           return {
             value = entry,
-            display = string.format("▸ %-16s [%s] %-22s %s", entry.group, m, entry.display_lhs, entry.display_desc),
-            ordinal = entry.group .. " " .. entry.display_lhs .. " " .. entry.display_desc,
+            display = function()
+              return display_text, { { { 0, vim.fn.strlen(icon) }, hl } }
+            end,
+            ordinal = entry.category .. " " .. entry.group .. " " .. entry.display_lhs .. " " .. entry.display_desc,
           }
         end,
       }),

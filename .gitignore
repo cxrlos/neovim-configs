@@ -41,5 +41,6 @@ $RECYCLE.BIN/
 .cursorindexingignore
 
 # Claude Code
-.claude/
+.claude/*
 CLAUDE.md
+!.claude/CLAUDE.md

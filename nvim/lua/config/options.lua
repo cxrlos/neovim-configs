@@ -29,6 +29,8 @@ opt.backup = false
 opt.undofile = true
 opt.undodir = vim.fn.stdpath("state") .. "/undo"
 
+opt.autoread = true
+
 opt.splitbelow = true
 opt.splitright = true
 

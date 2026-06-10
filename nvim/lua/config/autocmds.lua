@@ -11,6 +11,22 @@ autocmd("TextYankPost", {
   end,
 })
 
+autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+  group = augroup("agent_checktime"),
+  callback = function()
+    if vim.fn.getcmdwintype() == "" and vim.bo.buftype == "" then
+      vim.cmd("silent! checktime")
+    end
+  end,
+})
+
+autocmd("FileChangedShellPost", {
+  group = augroup("agent_reload_notify"),
+  callback = function()
+    vim.notify("File reloaded — changed on disk", vim.log.levels.INFO)
+  end,
+})
+
 autocmd("BufReadPost", {
   group = augroup("restore_cursor"),
   callback = function()

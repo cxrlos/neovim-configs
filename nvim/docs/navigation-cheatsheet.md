@@ -20,11 +20,13 @@ Inside Telescope: `<C-j>/<C-k>` to move, `<C-q>` to send to quickfix, `<Esc>` to
 
 ### File tree (neo-tree)
 
-| Key                       | Action                           |
-| ------------------------- | -------------------------------- |
-| `<leader>e`               | Toggle file tree sidebar         |
-| `<leader>E`               | Reveal current file in tree      |
-| `<C-h>` / `<C-l>`         | Exit tree to left / right window |
+| Key                       | Action                                          |
+| ------------------------- | ----------------------------------------------- |
+| `<leader>e`               | Toggle file tree sidebar                        |
+| `<leader>E`               | Reveal current file in tree                     |
+| `<C-h>` / `<C-l>`         | Exit tree to left / right window                |
+| `a` (in tree)             | Send file/dir under cursor to Claude (`@-mention`) |
+| `A` (in tree)             | Add new file (was `a` — remapped for Claude)    |
 
 ### Oil (filesystem as buffer)
 

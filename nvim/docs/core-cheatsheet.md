@@ -43,10 +43,20 @@ Leader key is `<Space>`.
 
 | Key | Action |
 |-----|--------|
-| `?` | Open keybinding cheatsheet |
+| `?` | Open keybinding cheatsheet (fuzzy-searchable, semantic groups) |
+| `<leader>?` | Buffer-local keymaps via which-key popup |
 | `Q` | Disabled (prevents accidental Ex mode) |
 | `<leader>u` | Toggle undo tree |
 | `<leader>t` | Floating terminal |
+
+## Discovery
+
+Two layers of keybinding discovery:
+
+- **Live (which-key)** — pause after `<leader>` (or any prefix like `g`, `[`, `]`, `z`) and a popup shows the next valid keys, grouped by category with Rose Pine-colored icons. Builds muscle memory in-flow.
+- **Searchable (`?`)** — full keybinding picker. Sorted by category (Find → Edit → Code → Git → Agent → General), then group, then key. Enter previews the Lua source; `Ctrl-d` jumps to the markdown cheatsheet.
+
+Use `<leader>?` for "what does *this* buffer have?" — filters to buffer-local maps (LSP, plugin-local, etc.).
 
 ## About
 
