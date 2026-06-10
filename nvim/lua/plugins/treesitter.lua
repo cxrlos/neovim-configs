@@ -3,7 +3,10 @@ return {
     "nvim-treesitter/nvim-treesitter",
     branch = "master",
     lazy = false,
-    build = ":TSUpdate",
+    build = function(plugin)
+      vim.cmd("TSUpdateSync")
+      vim.fn.system({ "git", "-C", plugin.dir, "checkout", "--", "parser/.gitignore" })
+    end,
     config = function()
       require("nvim-treesitter.configs").setup({
         ensure_installed = {

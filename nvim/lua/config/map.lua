@@ -38,8 +38,30 @@ local function get_keymaps()
   return registry
 end
 
+local function get_groups()
+  local shared = require("config.shared")
+  local seen = {}
+  local groups = {}
+  for _, km in ipairs(registry) do
+    local first = km.lhs:match("^<leader>(.)")
+    if first then
+      local prefix = "<leader>" .. first
+      if not seen[prefix] then
+        seen[prefix] = true
+        table.insert(groups, {
+          prefix = prefix,
+          label = km.group,
+          category = shared.category_for_group(km.group),
+        })
+      end
+    end
+  end
+  return groups
+end
+
 return setmetatable({
   get_keymaps = get_keymaps,
+  get_groups = get_groups,
 }, {
   __call = function(_, mode, lhs, rhs, opts)
     map(mode, lhs, rhs, opts)

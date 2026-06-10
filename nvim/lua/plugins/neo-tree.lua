@@ -57,6 +57,13 @@ return {
           ["<C-k>"] = function()
             vim.cmd("wincmd k")
           end,
+          ["A"] = "add",
+          ["a"] = function(state)
+            local node = state.tree:get_node()
+            if node then
+              vim.cmd("ClaudeCodeTreeAdd")
+            end
+          end,
         },
       },
       filesystem = {
