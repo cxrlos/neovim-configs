@@ -81,9 +81,9 @@ _install_deps() {
             _ensure_brew
             for dep in "${BREW_DEPS[@]}"; do
                 if brew list "$dep" &>/dev/null; then
-                    ((deps_ok++))
+                    ((++deps_ok))
                 else
-                    brew install "$dep" &>/dev/null && ((deps_installed++)) || { warn "Failed: $dep"; ((deps_failed++)); }
+                    brew install "$dep" &>/dev/null && ((++deps_installed)) || { warn "Failed: $dep"; ((++deps_failed)); }
                 fi
             done
             ;;
@@ -91,9 +91,9 @@ _install_deps() {
             sudo pacman -Sy --noconfirm &>/dev/null
             for dep in "${PACMAN_DEPS[@]}"; do
                 if pacman -Qi "$dep" &>/dev/null; then
-                    ((deps_ok++))
+                    ((++deps_ok))
                 else
-                    sudo pacman -S --noconfirm "$dep" &>/dev/null && ((deps_installed++)) || { warn "Failed: $dep"; ((deps_failed++)); }
+                    sudo pacman -S --noconfirm "$dep" &>/dev/null && ((++deps_installed)) || { warn "Failed: $dep"; ((++deps_failed)); }
                 fi
             done
             if ! command -v rustc &>/dev/null; then
