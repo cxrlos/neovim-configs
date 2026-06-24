@@ -1,83 +1,67 @@
+-- nvim-treesitter MAIN branch — required on Neovim 0.11+/0.12. The master branch
+-- is frozen and its query predicates break on 0.12's treesitter API (the
+-- `range` / `get_node_text` crash via injections, e.g. render-markdown).
+-- Highlighting is started per-buffer in a FileType autocmd; parsers are pulled
+-- via install(). Bundled parsers (c, lua, markdown, markdown_inline, query, vim,
+-- vimdoc) are intentionally NOT listed — Neovim ships them.
+local ensure = {
+  "rust", "python", "typescript", "tsx", "javascript", "html", "css", "json",
+  "terraform", "hcl", "dockerfile", "yaml", "bash", "toml", "regex",
+  "gitignore", "gitcommit",
+}
+
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    branch = "master",
+    branch = "main",
     lazy = false,
-    build = function(plugin)
-      vim.cmd("TSUpdateSync")
-      vim.fn.system({ "git", "-C", plugin.dir, "checkout", "--", "parser/.gitignore" })
-    end,
+    build = ":TSUpdate",
     config = function()
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = {
-          "rust",
-          "python",
-          "typescript",
-          "tsx",
-          "javascript",
-          "html",
-          "css",
-          "json",
-          "terraform",
-          "hcl",
-          "dockerfile",
-          "yaml",
-          "bash",
-          "toml",
-          "regex",
-          "gitignore",
-          "gitcommit",
-        },
-        auto_install = false,
-        highlight = { enable = true },
-        indent = { enable = true },
-        incremental_selection = {
-          enable = true,
-          keymaps = {
-            init_selection = "<C-space>",
-            node_incremental = "<C-space>",
-            scope_incremental = false,
-            node_decremental = "<bs>",
-          },
-        },
-        textobjects = {
-          select = {
-            enable = true,
-            lookahead = true,
-            keymaps = {
-              ["af"] = { query = "@function.outer", desc = "Around function" },
-              ["if"] = { query = "@function.inner", desc = "Inside function" },
-              ["ac"] = { query = "@class.outer", desc = "Around class" },
-              ["ic"] = { query = "@class.inner", desc = "Inside class" },
-              ["aa"] = { query = "@parameter.outer", desc = "Around argument" },
-              ["ia"] = { query = "@parameter.inner", desc = "Inside argument" },
-            },
-          },
-          move = {
-            enable = true,
-            set_jumps = true,
-            goto_next_start = {
-              ["]f"] = { query = "@function.outer", desc = "Next function start" },
-              ["]c"] = { query = "@class.outer", desc = "Next class start" },
-            },
-            goto_previous_start = {
-              ["[f"] = { query = "@function.outer", desc = "Prev function start" },
-              ["[c"] = { query = "@class.outer", desc = "Prev class start" },
-            },
-          },
-          swap = {
-            enable = true,
-            swap_next = { ["<leader>sa"] = { query = "@parameter.inner", desc = "Swap arg forward" } },
-            swap_previous = { ["<leader>sA"] = { query = "@parameter.inner", desc = "Swap arg backward" } },
-          },
-        },
+      require("nvim-treesitter").install(ensure)
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("user_treesitter", { clear = true }),
+        callback = function(ev)
+          -- start highlighting only where a parser is actually available
+          if pcall(vim.treesitter.start, ev.buf) then
+            vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
+        end,
       })
     end,
   },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
-    branch = "master",
-    lazy = false,
+    branch = "main",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      require("nvim-treesitter-textobjects").setup({
+        select = { lookahead = true },
+        move = { set_jumps = true },
+      })
+      local map = vim.keymap.set
+      local select = require("nvim-treesitter-textobjects.select").select_textobject
+      local move = require("nvim-treesitter-textobjects.move")
+      local swap = require("nvim-treesitter-textobjects.swap")
+
+      local objects = {
+        af = "@function.outer",
+        ["if"] = "@function.inner",
+        ac = "@class.outer",
+        ic = "@class.inner",
+        aa = "@parameter.outer",
+        ia = "@parameter.inner",
+      }
+      for lhs, query in pairs(objects) do
+        map({ "x", "o" }, lhs, function() select(query, "textobjects") end, { desc = "Textobject " .. query })
+      end
+
+      map("n", "]f", function() move.goto_next_start("@function.outer", "textobjects") end, { desc = "Next function start" })
+      map("n", "]c", function() move.goto_next_start("@class.outer", "textobjects") end, { desc = "Next class start" })
+      map("n", "[f", function() move.goto_previous_start("@function.outer", "textobjects") end, { desc = "Prev function start" })
+      map("n", "[c", function() move.goto_previous_start("@class.outer", "textobjects") end, { desc = "Prev class start" })
+
+      map("n", "<leader>sa", function() swap.swap_next("@parameter.inner") end, { desc = "Swap arg forward" })
+      map("n", "<leader>sA", function() swap.swap_previous("@parameter.inner") end, { desc = "Swap arg backward" })
+    end,
   },
 }
