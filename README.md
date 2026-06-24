@@ -1,6 +1,6 @@
 # Neovim Configuration
 
-Personal Neovim setup for Rust, TypeScript/React, Python, Terraform, and Lua. Rose Pine, Telescope, Harpoon, blink.cmp, mason + lspconfig.
+Personal Neovim setup for Rust, TypeScript/React, Python, Terraform, and Lua. Catppuccin Mocha, Telescope, Harpoon, blink.cmp, mason + lspconfig.
 
 ## Install
 
