@@ -53,7 +53,7 @@ Leader key is `<Space>`.
 
 Two layers of keybinding discovery:
 
-- **Live (which-key)** — pause after `<leader>` (or any prefix like `g`, `[`, `]`, `z`) and a popup shows the next valid keys, grouped by category with Rose Pine-colored icons. Builds muscle memory in-flow.
+- **Live (which-key)** — pause after `<leader>` (or any prefix like `g`, `[`, `]`, `z`) and a popup shows the next valid keys, grouped by category with Catppuccin Mocha-colored icons. Builds muscle memory in-flow.
 - **Searchable (`?`)** — full keybinding picker. Sorted by category (Find → Edit → Code → Git → Agent → General), then group, then key. Enter previews the Lua source; `Ctrl-d` jumps to the markdown cheatsheet.
 
 Use `<leader>?` for "what does *this* buffer have?" — filters to buffer-local maps (LSP, plugin-local, etc.).

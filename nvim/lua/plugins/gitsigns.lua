@@ -35,11 +35,11 @@ return {
         local blame_ns = vim.api.nvim_create_namespace("user_full_blame")
         local blame_active = false
 
-        vim.api.nvim_set_hl(0, "BlameAge1", { fg = "#e0def4", italic = true })
-        vim.api.nvim_set_hl(0, "BlameAge2", { fg = "#b4b0ca", italic = true })
-        vim.api.nvim_set_hl(0, "BlameAge3", { fg = "#908caa", italic = true })
-        vim.api.nvim_set_hl(0, "BlameAge4", { fg = "#6e6a86", italic = true })
-        vim.api.nvim_set_hl(0, "BlameAge5", { fg = "#56526e", italic = true })
+        vim.api.nvim_set_hl(0, "BlameAge1", { fg = "#cdd6f4", italic = true })
+        vim.api.nvim_set_hl(0, "BlameAge2", { fg = "#a6adc8", italic = true })
+        vim.api.nvim_set_hl(0, "BlameAge3", { fg = "#9399b2", italic = true })
+        vim.api.nvim_set_hl(0, "BlameAge4", { fg = "#6c7086", italic = true })
+        vim.api.nvim_set_hl(0, "BlameAge5", { fg = "#585b70", italic = true })
 
         map("n", "<leader>gb", function()
           blame_active = not blame_active
@@ -206,7 +206,7 @@ return {
     })
 
     local function set_blame_colors()
-      vim.api.nvim_set_hl(0, "GitSignsCurrentLineBlame", { fg = "#6e6a86", italic = true })
+      vim.api.nvim_set_hl(0, "GitSignsCurrentLineBlame", { fg = "#6c7086", italic = true })
     end
     set_blame_colors()
     vim.api.nvim_create_autocmd("ColorScheme", {

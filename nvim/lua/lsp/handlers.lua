@@ -28,10 +28,9 @@ function M.setup()
     },
   })
 
-  vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = shared.border })
-
-  vim.lsp.handlers["textDocument/signatureHelp"] =
-    vim.lsp.with(vim.lsp.handlers.signature_help, { border = shared.border })
+  -- Neovim 0.11+: one global border for hover, signature help, and other floats
+  -- replaces the deprecated per-handler vim.lsp.with() overrides.
+  vim.o.winborder = shared.border
 
   vim.api.nvim_create_autocmd("CursorHold", {
     group = vim.api.nvim_create_augroup("user_diagnostic_hover", { clear = true }),
