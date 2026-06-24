@@ -20,6 +20,9 @@ opt.smartcase = true
 
 opt.termguicolors = true
 opt.cursorline = true
+-- Block (steady) in normal/visual, thin bar in insert; colored via the Cursor
+-- highlight (set in colorscheme.lua) so it stays visible over a selection.
+opt.guicursor = "n-v-c:block-Cursor,i-ci-ve:ver25-Cursor,r-cr-o:hor20,a:blinkon0"
 opt.signcolumn = "yes"
 opt.scrolloff = 8
 opt.sidescrolloff = 8

@@ -10,6 +10,10 @@ return {
       comments = { "italic" },
       keywords = { "bold" },
     },
+    custom_highlights = {
+      Visual = { bg = "#45475a" },                  -- light tint on selection
+      Cursor = { fg = "#1e1e2e", bg = "#89dceb" },   -- sky block, pops over Visual
+    },
   },
   config = function(_, opts)
     require("catppuccin").setup(opts)
