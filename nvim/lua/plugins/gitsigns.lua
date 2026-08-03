@@ -34,6 +34,7 @@ return {
 
         local blame_ns = vim.api.nvim_create_namespace("user_full_blame")
         local blame_active = false
+        local blame_request_id = 0
 
         vim.api.nvim_set_hl(0, "BlameAge1", { fg = "#cdd6f4", italic = true })
         vim.api.nvim_set_hl(0, "BlameAge2", { fg = "#a6adc8", italic = true })
@@ -48,159 +49,176 @@ return {
             return
           end
 
+          blame_request_id = blame_request_id + 1
+          local this_request = blame_request_id
           local file = vim.api.nvim_buf_get_name(bufnr)
           local dir = vim.fn.fnamemodify(file, ":h")
-          local output = vim.fn.systemlist(
-            "git -C " .. vim.fn.shellescape(dir) .. " blame --date=short " .. vim.fn.shellescape(file) .. " 2>/dev/null"
-          )
 
-          local dates = {}
-          local entries = {}
-
-          for i, line in ipairs(output) do
-            local hash, author, date = line:match("^%^?(%x+)%s+%((.-)%s+(%d%d%d%d%-%d%d%-%d%d)")
-            if hash and author and date then
-              local y, m, dd = date:match("(%d+)-(%d+)-(%d+)")
-              local ts = os.time({ year = tonumber(y), month = tonumber(m), day = tonumber(dd) })
-              table.insert(dates, ts)
-              table.insert(entries, { line_idx = i - 1, author = author, date = date, ts = ts })
+          vim.system({ "git", "-C", dir, "blame", "--date=short", file }, { text = true }, function(res)
+            if this_request ~= blame_request_id or not blame_active or res.code ~= 0 or not res.stdout then
+              return
             end
-          end
 
-          if #dates == 0 then
-            return
-          end
-
-          local sorted_ts = vim.deepcopy(dates)
-          table.sort(sorted_ts)
-          local buckets = { sorted_ts[1] }
-          for i = 2, 4 do
-            local idx = math.floor((i - 1) / 4 * #sorted_ts) + 1
-            idx = math.min(idx, #sorted_ts)
-            table.insert(buckets, sorted_ts[idx])
-          end
-
-          local function get_bucket(ts)
-            for i = #buckets, 1, -1 do
-              if ts >= buckets[i] then
-                return i
+            vim.schedule(function()
+              if not vim.api.nvim_buf_is_valid(bufnr) then
+                return
               end
-            end
-            return 1
-          end
 
-          for _, e in ipairs(entries) do
-            local bucket = get_bucket(e.ts)
-            local text = "  " .. e.author .. ", " .. e.date
-            vim.api.nvim_buf_set_extmark(bufnr, blame_ns, e.line_idx, 0, {
-              virt_text = { { text, "BlameAge" .. (6 - bucket) } },
-              virt_text_pos = "eol",
-            })
-          end
+              local output = vim.split(res.stdout, "\n", { trimempty = true })
+              local dates = {}
+              local entries = {}
+
+              for i, line in ipairs(output) do
+                local hash, author, date = line:match("^%^?(%x+)%s+%((.-)%s+(%d%d%d%d%-%d%d%-%d%d)")
+                if hash and author and date then
+                  local y, m, dd = date:match("(%d+)-(%d+)-(%d+)")
+                  local ts = os.time({ year = tonumber(y), month = tonumber(m), day = tonumber(dd) })
+                  table.insert(dates, ts)
+                  table.insert(entries, { line_idx = i - 1, author = author, date = date, ts = ts })
+                end
+              end
+
+              if #dates == 0 then
+                return
+              end
+
+              local sorted_ts = vim.deepcopy(dates)
+              table.sort(sorted_ts)
+              local buckets = { sorted_ts[1] }
+              for i = 2, 4 do
+                local idx = math.floor((i - 1) / 4 * #sorted_ts) + 1
+                idx = math.min(idx, #sorted_ts)
+                table.insert(buckets, sorted_ts[idx])
+              end
+
+              local function get_bucket(ts)
+                for i = #buckets, 1, -1 do
+                  if ts >= buckets[i] then
+                    return i
+                  end
+                end
+                return 1
+              end
+
+              for _, e in ipairs(entries) do
+                local bucket = get_bucket(e.ts)
+                local text = "  " .. e.author .. ", " .. e.date
+                vim.api.nvim_buf_set_extmark(bufnr, blame_ns, e.line_idx, 0, {
+                  virt_text = { { text, "BlameAge" .. (6 - bucket) } },
+                  virt_text_pos = "eol",
+                })
+              end
+            end)
+          end)
         end, vim.tbl_extend("force", d, o, { desc = "Toggle blame all lines" }))
         map("n", "<leader>gi", function()
           local file = vim.api.nvim_buf_get_name(bufnr)
           local dir = vim.fn.fnamemodify(file, ":h")
           local lnum = vim.api.nvim_win_get_cursor(0)[1]
 
-          local hash = vim.fn
-            .system(
-              "git -C "
-                .. vim.fn.shellescape(dir)
-                .. " blame -L"
-                .. lnum
-                .. ","
-                .. lnum
-                .. " --porcelain "
-                .. vim.fn.shellescape(file)
-                .. " 2>/dev/null | head -1 | cut -d' ' -f1"
-            )
-            :gsub("\n", "")
-            :gsub("^%^", "")
-          if hash == "" or hash:match("^0+$") then
-            vim.notify("No commit info for this line", vim.log.levels.INFO)
-            return
-          end
+          vim.system(
+            { "git", "-C", dir, "blame", "-L", lnum .. "," .. lnum, "--porcelain", file },
+            { text = true },
+            function(blame_res)
+              local hash = (blame_res.stdout or ""):match("^%^?(%x+)")
+              if not hash or hash:match("^0+$") then
+                vim.schedule(function()
+                  vim.notify("No commit info for this line", vim.log.levels.INFO)
+                end)
+                return
+              end
 
-          local info = vim.fn.systemlist(
-            "git -C "
-              .. vim.fn.shellescape(dir)
-              .. " log -1 --format='%H%n%an%n%ae%n%ad%n%s%n%b' "
-              .. hash
-              .. " 2>/dev/null"
-          )
-          local commit = info[1] or ""
-          local author = info[2] or ""
-          local email = info[3] or ""
-          local date = info[4] or ""
-          local subject = info[5] or ""
-          local body = {}
-          for i = 6, #info do
-            table.insert(body, info[i])
-          end
+              vim.system(
+                { "git", "-C", dir, "log", "-1", "--format=%H%n%an%n%ae%n%ad%n%s%n%b", hash },
+                { text = true },
+                function(log_res)
+                  local info = vim.split(log_res.stdout or "", "\n")
 
-          local remote =
-            vim.fn.system("git -C " .. vim.fn.shellescape(dir) .. " remote get-url origin 2>/dev/null"):gsub("\n", "")
-          local gh_url = ""
-          if remote ~= "" then
-            gh_url = remote:gsub("git@github.com:", "https://github.com/"):gsub("%.git$", "") .. "/commit/" .. commit
-          end
+                  vim.system({ "git", "-C", dir, "remote", "get-url", "origin" }, { text = true }, function(remote_res)
+                    vim.schedule(function()
+                      if not vim.api.nvim_buf_is_valid(bufnr) then
+                        return
+                      end
 
-          local popup_width = math.min(90, vim.o.columns - 10)
+                      local commit = info[1] or ""
+                      local author = info[2] or ""
+                      local email = info[3] or ""
+                      local date = info[4] or ""
+                      local subject = info[5] or ""
+                      local body = {}
+                      for i = 6, #info do
+                        table.insert(body, info[i])
+                      end
 
-          local function centered_header(label)
-            local pad_total = popup_width - 2 - #label - 2
-            local left = math.floor(pad_total / 2)
-            local right = pad_total - left
-            return string.rep("═", left) .. " " .. label .. " " .. string.rep("═", right)
-          end
+                      local remote = (remote_res.stdout or ""):gsub("\n", "")
+                      local gh_url = ""
+                      if remote ~= "" then
+                        gh_url = remote:gsub("git@github.com:", "https://github.com/"):gsub("%.git$", "")
+                          .. "/commit/"
+                          .. commit
+                      end
 
-          local lines = {
-            centered_header("Commit"),
-            commit,
-            "",
-            centered_header("Author"),
-            author .. " <" .. email .. ">",
-            "",
-            centered_header("Date"),
-            date,
-            "",
-            centered_header("Message"),
-            subject,
-          }
-          for _, l in ipairs(body) do
-            if l ~= "" then
-              table.insert(lines, l)
+                      local popup_width = math.min(90, vim.o.columns - 10)
+
+                      local function centered_header(label)
+                        local pad_total = popup_width - 2 - #label - 2
+                        local left = math.floor(pad_total / 2)
+                        local right = pad_total - left
+                        return string.rep("═", left) .. " " .. label .. " " .. string.rep("═", right)
+                      end
+
+                      local lines = {
+                        centered_header("Commit"),
+                        commit,
+                        "",
+                        centered_header("Author"),
+                        author .. " <" .. email .. ">",
+                        "",
+                        centered_header("Date"),
+                        date,
+                        "",
+                        centered_header("Message"),
+                        subject,
+                      }
+                      for _, l in ipairs(body) do
+                        if l ~= "" then
+                          table.insert(lines, l)
+                        end
+                      end
+                      if gh_url ~= "" then
+                        table.insert(lines, "")
+                        table.insert(lines, centered_header("GitHub"))
+                        table.insert(lines, gh_url)
+                      end
+
+                      local buf = vim.api.nvim_create_buf(false, true)
+                      vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+                      vim.bo[buf].modifiable = false
+                      vim.bo[buf].bufhidden = "wipe"
+                      local width = popup_width
+                      local height = math.min(#lines + 2, vim.o.lines - 10)
+                      local win = vim.api.nvim_open_win(buf, true, {
+                        relative = "editor",
+                        width = width,
+                        height = height,
+                        row = math.floor((vim.o.lines - height) / 2),
+                        col = math.floor((vim.o.columns - width) / 2),
+                        border = "rounded",
+                        title = " Commit Info  ·  yy to copy value ",
+                        title_pos = "center",
+                      })
+                      vim.keymap.set("n", "q", function()
+                        vim.api.nvim_win_close(win, true)
+                      end, { buffer = buf })
+                      vim.keymap.set("n", "<Esc>", function()
+                        vim.api.nvim_win_close(win, true)
+                      end, { buffer = buf })
+                    end)
+                  end)
+                end
+              )
             end
-          end
-          if gh_url ~= "" then
-            table.insert(lines, "")
-            table.insert(lines, centered_header("GitHub"))
-            table.insert(lines, gh_url)
-          end
-
-          local buf = vim.api.nvim_create_buf(false, true)
-          vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-          vim.bo[buf].modifiable = false
-          vim.bo[buf].bufhidden = "wipe"
-          local width = popup_width
-          local height = math.min(#lines + 2, vim.o.lines - 10)
-          local win = vim.api.nvim_open_win(buf, true, {
-            relative = "editor",
-            width = width,
-            height = height,
-            row = math.floor((vim.o.lines - height) / 2),
-            col = math.floor((vim.o.columns - width) / 2),
-            border = "rounded",
-            title = " Commit Info  ·  yy to copy value ",
-            title_pos = "center",
-          })
-          vim.keymap.set("n", "q", function()
-            vim.api.nvim_win_close(win, true)
-          end, { buffer = buf })
-          vim.keymap.set("n", "<Esc>", function()
-            vim.api.nvim_win_close(win, true)
-          end, { buffer = buf })
+          )
         end, vim.tbl_extend("force", d, o, { desc = "Full commit info" }))
       end,
     })

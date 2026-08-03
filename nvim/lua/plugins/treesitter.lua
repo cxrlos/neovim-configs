@@ -18,6 +18,24 @@ return {
     build = ":TSUpdate",
     config = function()
       require("nvim-treesitter").install(ensure)
+
+      -- nvim-treesitter main's queries/vim/highlights.scm targets a grammar
+      -- newer than Neovim's bundled `vim` parser (references node type "tab",
+      -- which the bundled parser doesn't have). That merged query is invalid
+      -- and crashes anything highlighting vim-language text via treesitter
+      -- (e.g. noice's cmdline syntax highlighting), with no pcall to catch it.
+      -- Force the highlights query back to Neovim's own bundled one, which is
+      -- version-matched to the bundled parser.
+      do
+        local bundled = vim.env.VIMRUNTIME .. "/queries/vim/highlights.scm"
+        local f = io.open(bundled, "r")
+        if f then
+          local content = f:read("*a")
+          f:close()
+          vim.treesitter.query.set("vim", "highlights", content)
+        end
+      end
+
       vim.api.nvim_create_autocmd("FileType", {
         group = vim.api.nvim_create_augroup("user_treesitter", { clear = true }),
         callback = function(ev)
