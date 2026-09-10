@@ -1,22 +1,20 @@
 return {
-  "catppuccin/nvim",
-  name = "catppuccin",
+  "rose-pine/neovim",
+  name = "rose-pine",
   priority = 1000,
   opts = {
-    flavour = "mocha",
-    dim_inactive = { enabled = false },
-    transparent_background = true,
+    variant = "main",
     styles = {
-      comments = { "italic" },
-      keywords = { "bold" },
+      italic = true,
+      bold = true,
     },
-    custom_highlights = {
-      Visual = { bg = "#45475a" },                  -- light tint on selection
-      Cursor = { fg = "#1e1e2e", bg = "#89dceb" },   -- sky block, pops over Visual
+    highlight_groups = {
+      Visual = { bg = require("config.shared").palette.overlay },
+      Cursor = { fg = require("config.shared").palette.base, bg = require("config.shared").palette.foam },
     },
   },
   config = function(_, opts)
-    require("catppuccin").setup(opts)
-    vim.cmd("colorscheme catppuccin-mocha")
+    require("rose-pine").setup(opts)
+    vim.cmd("colorscheme rose-pine")
   end,
 }

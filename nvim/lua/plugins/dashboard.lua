@@ -3,6 +3,8 @@ return {
   event = "VimEnter",
   dependencies = { "nvim-tree/nvim-web-devicons" },
   config = function()
+    local icons = require("config.shared").icons
+
     local function telescope(picker)
       return function()
         local ok, builtin = pcall(require, "telescope.builtin")
@@ -23,21 +25,16 @@ return {
       config = {
         header = {
           "",
-          "  ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗  ",
-          "  ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║  ",
-          "  ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║  ",
-          "  ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║  ",
-          "  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║  ",
-          "  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝  ",
+          "  neovim",
           "",
         },
         center = {
-          { icon = "▶  ", key = "f", desc = "Find file", action = telescope("find_files") },
-          { icon = "◆  ", key = "r", desc = "Recent files", action = telescope("oldfiles") },
-          { icon = "●  ", key = "g", desc = "Live grep", action = telescope("live_grep") },
-          { icon = "▸  ", key = "c", desc = "Config", action = edit_config },
+          { icon = icons.ui.arrow_right .. "  ", key = "f", desc = "Find file", action = telescope("find_files") },
+          { icon = icons.diagnostics.hint .. "  ", key = "r", desc = "Recent files", action = telescope("oldfiles") },
+          { icon = icons.ui.dot .. "  ", key = "g", desc = "Live grep", action = telescope("live_grep") },
+          { icon = icons.ui.folder, key = "c", desc = "Config", action = edit_config },
           {
-            icon = "✘  ",
+            icon = icons.diagnostics.error .. "  ",
             key = "q",
             desc = "Quit",
             action = function()
@@ -45,7 +42,6 @@ return {
             end,
           },
         },
-        footer = {},
       },
     })
   end,

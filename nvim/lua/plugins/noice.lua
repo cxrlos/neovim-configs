@@ -19,7 +19,7 @@ return {
     },
     views = {
       popup = {
-        border = { style = "rounded" },
+        border = { style = require("config.shared").border },
         size = { width = "80%", height = "auto" },
         win_options = { wrap = true },
       },

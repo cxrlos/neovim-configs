@@ -20,17 +20,7 @@ return {
       "<cmd>MarkdownPreview<CR>",
       vim.tbl_extend("force", d, { desc = "Start mermaid/markdown preview" })
     )
-    map(
-      "n",
-      "<leader>mP",
-      "<cmd>MarkdownPreviewStop<CR>",
-      vim.tbl_extend("force", d, { desc = "Stop preview" })
-    )
-    map(
-      "n",
-      "<leader>mr",
-      "<cmd>MarkdownPreviewRefresh<CR>",
-      vim.tbl_extend("force", d, { desc = "Refresh preview" })
-    )
+    map("n", "<leader>mP", "<cmd>MarkdownPreviewStop<CR>", vim.tbl_extend("force", d, { desc = "Stop preview" }))
+    map("n", "<leader>mr", "<cmd>MarkdownPreviewRefresh<CR>", vim.tbl_extend("force", d, { desc = "Refresh preview" }))
   end,
 }

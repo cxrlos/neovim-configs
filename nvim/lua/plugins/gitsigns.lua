@@ -36,11 +36,11 @@ return {
         local blame_active = false
         local blame_request_id = 0
 
-        vim.api.nvim_set_hl(0, "BlameAge1", { fg = "#cdd6f4", italic = true })
-        vim.api.nvim_set_hl(0, "BlameAge2", { fg = "#a6adc8", italic = true })
-        vim.api.nvim_set_hl(0, "BlameAge3", { fg = "#9399b2", italic = true })
-        vim.api.nvim_set_hl(0, "BlameAge4", { fg = "#6c7086", italic = true })
-        vim.api.nvim_set_hl(0, "BlameAge5", { fg = "#585b70", italic = true })
+        vim.api.nvim_set_hl(0, "BlameAge1", { fg = shared.palette.text, italic = true })
+        vim.api.nvim_set_hl(0, "BlameAge2", { fg = shared.palette.subtle, italic = true })
+        vim.api.nvim_set_hl(0, "BlameAge3", { fg = shared.palette.iris, italic = true })
+        vim.api.nvim_set_hl(0, "BlameAge4", { fg = shared.palette.muted, italic = true })
+        vim.api.nvim_set_hl(0, "BlameAge5", { fg = shared.palette.overlay, italic = true })
 
         map("n", "<leader>gb", function()
           blame_active = not blame_active
@@ -203,7 +203,7 @@ return {
                         height = height,
                         row = math.floor((vim.o.lines - height) / 2),
                         col = math.floor((vim.o.columns - width) / 2),
-                        border = "rounded",
+                        border = shared.border,
                         title = " Commit Info  ·  yy to copy value ",
                         title_pos = "center",
                       })
@@ -224,7 +224,7 @@ return {
     })
 
     local function set_blame_colors()
-      vim.api.nvim_set_hl(0, "GitSignsCurrentLineBlame", { fg = "#6c7086", italic = true })
+      vim.api.nvim_set_hl(0, "GitSignsCurrentLineBlame", { fg = shared.palette.muted, italic = true })
     end
     set_blame_colors()
     vim.api.nvim_create_autocmd("ColorScheme", {

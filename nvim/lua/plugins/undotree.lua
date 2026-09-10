@@ -1,16 +1,13 @@
 return {
   "debugloop/telescope-undo.nvim",
   dependencies = { "nvim-telescope/telescope.nvim" },
-  keys = {
-    { "<leader>u", "<cmd>Telescope undo<CR>", desc = "Undo history" },
-  },
+  init = function()
+    require("config.map")("n", "<leader>u", function()
+      require("lazy").load({ plugins = { "telescope-undo.nvim" } })
+      vim.cmd("Telescope undo")
+    end, { desc = "Undo history", group = "General", docs = "core-cheatsheet.md" })
+  end,
   config = function()
-    require("config.map")(
-      "n",
-      "<leader>u",
-      "<cmd>Telescope undo<CR>",
-      { desc = "Undo history", group = "General", docs = "core-cheatsheet.md" }
-    )
     require("telescope").load_extension("undo")
   end,
 }

@@ -2,7 +2,7 @@ local M = {}
 
 local expected_plugins = {
   "lazy.nvim",
-  "catppuccin",
+  "rose-pine",
   "noice.nvim",
   "nui.nvim",
   "lualine.nvim",

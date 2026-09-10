@@ -77,9 +77,9 @@ return {
     })
 
     local function apply_highlights()
-      vim.api.nvim_set_hl(0, "NeoTreeGitIgnored", { fg = "#6c7086", italic = true })
-      vim.api.nvim_set_hl(0, "NeoTreeFileName", { fg = "#bac2de" })
-      vim.api.nvim_set_hl(0, "NeoTreeFileNameOpened", { fg = "#cdd6f4", bold = true })
+      vim.api.nvim_set_hl(0, "NeoTreeGitIgnored", { fg = shared.palette.muted, italic = true })
+      vim.api.nvim_set_hl(0, "NeoTreeFileName", { fg = shared.palette.subtle })
+      vim.api.nvim_set_hl(0, "NeoTreeFileNameOpened", { fg = shared.palette.text, bold = true })
     end
 
     vim.api.nvim_create_autocmd("ColorScheme", {

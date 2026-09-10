@@ -35,18 +35,18 @@ M.icons = {
 }
 
 M.palette = {
-  base = "#1e1e2e",
-  surface = "#181825",
-  overlay = "#313244",
-  muted = "#6c7086",
-  subtle = "#a6adc8",
-  text = "#cdd6f4",
-  love = "#f38ba8",
-  gold = "#f9e2af",
-  rose = "#fab387",
-  pine = "#89b4fa",
-  foam = "#89dceb",
-  iris = "#89dceb",
+  base = "#191724",
+  surface = "#1f1d2e",
+  overlay = "#26233a",
+  muted = "#6e6a86",
+  subtle = "#908caa",
+  text = "#e0def4",
+  love = "#eb6f92",
+  gold = "#f6c177",
+  rose = "#ebbcba",
+  pine = "#31748f",
+  foam = "#9ccfd8",
+  iris = "#c4a7e7",
 }
 
 M.category_color = {
