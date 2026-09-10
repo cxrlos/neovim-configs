@@ -18,7 +18,12 @@ map(
   { desc = "Paste without overwriting", group = "Clipboard", docs = "core-cheatsheet.md" }
 )
 
-map({ "n", "v" }, "<leader>y", [["+y]], { desc = "Yank to clipboard", group = "Clipboard", docs = "core-cheatsheet.md" })
+map(
+  { "n", "v" },
+  "<leader>y",
+  [["+y]],
+  { desc = "Yank to clipboard", group = "Clipboard", docs = "core-cheatsheet.md" }
+)
 map("n", "<leader>Y", [["+Y]], { desc = "Yank line to clipboard", group = "Clipboard", docs = "core-cheatsheet.md" })
 
 map("n", "Q", "<nop>")

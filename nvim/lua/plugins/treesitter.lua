@@ -5,9 +5,23 @@
 -- via install(). Bundled parsers (c, lua, markdown, markdown_inline, query, vim,
 -- vimdoc) are intentionally NOT listed — Neovim ships them.
 local ensure = {
-  "rust", "python", "typescript", "tsx", "javascript", "html", "css", "json",
-  "terraform", "hcl", "dockerfile", "yaml", "bash", "toml", "regex",
-  "gitignore", "gitcommit",
+  "rust",
+  "python",
+  "typescript",
+  "tsx",
+  "javascript",
+  "html",
+  "css",
+  "json",
+  "terraform",
+  "hcl",
+  "dockerfile",
+  "yaml",
+  "bash",
+  "toml",
+  "regex",
+  "gitignore",
+  "gitcommit",
 }
 
 return {
@@ -70,16 +84,30 @@ return {
         ia = "@parameter.inner",
       }
       for lhs, query in pairs(objects) do
-        map({ "x", "o" }, lhs, function() select(query, "textobjects") end, { desc = "Textobject " .. query })
+        map({ "x", "o" }, lhs, function()
+          select(query, "textobjects")
+        end, { desc = "Textobject " .. query })
       end
 
-      map("n", "]f", function() move.goto_next_start("@function.outer", "textobjects") end, { desc = "Next function start" })
-      map("n", "]c", function() move.goto_next_start("@class.outer", "textobjects") end, { desc = "Next class start" })
-      map("n", "[f", function() move.goto_previous_start("@function.outer", "textobjects") end, { desc = "Prev function start" })
-      map("n", "[c", function() move.goto_previous_start("@class.outer", "textobjects") end, { desc = "Prev class start" })
+      map("n", "]f", function()
+        move.goto_next_start("@function.outer", "textobjects")
+      end, { desc = "Next function start" })
+      map("n", "]c", function()
+        move.goto_next_start("@class.outer", "textobjects")
+      end, { desc = "Next class start" })
+      map("n", "[f", function()
+        move.goto_previous_start("@function.outer", "textobjects")
+      end, { desc = "Prev function start" })
+      map("n", "[c", function()
+        move.goto_previous_start("@class.outer", "textobjects")
+      end, { desc = "Prev class start" })
 
-      map("n", "<leader>sa", function() swap.swap_next("@parameter.inner") end, { desc = "Swap arg forward" })
-      map("n", "<leader>sA", function() swap.swap_previous("@parameter.inner") end, { desc = "Swap arg backward" })
+      map("n", "<leader>sa", function()
+        swap.swap_next("@parameter.inner")
+      end, { desc = "Swap arg forward" })
+      map("n", "<leader>sA", function()
+        swap.swap_previous("@parameter.inner")
+      end, { desc = "Swap arg backward" })
     end,
   },
 }

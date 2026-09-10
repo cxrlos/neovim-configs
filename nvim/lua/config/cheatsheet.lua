@@ -196,7 +196,8 @@ function M.open()
           local m = mode_label[entry.mode] or entry.mode:upper()
           local icon = shared.icons.category[entry.category] or shared.icons.category.general
           local hl = "CheatsheetCat" .. entry.category
-          local display_text = string.format("%s  %-16s [%s] %-22s %s", icon, entry.group, m, entry.display_lhs, entry.display_desc)
+          local display_text =
+            string.format("%s  %-16s [%s] %-22s %s", icon, entry.group, m, entry.display_lhs, entry.display_desc)
           return {
             value = entry,
             display = function()

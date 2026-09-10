@@ -32,8 +32,18 @@ return {
       vim.cmd("ClaudeCodeSend")
     end, vim.tbl_extend("force", d, { desc = "Send selection + jump to tmux" }))
 
-    map("n", "<leader>aa", "<cmd>ClaudeCodeAdd %<CR>", vim.tbl_extend("force", d, { desc = "Add current file to context" }))
-    map("n", "<leader>ad", "<cmd>ClaudeCodeCloseAllDiffs<CR>", vim.tbl_extend("force", d, { desc = "Close pending diffs" }))
+    map(
+      "n",
+      "<leader>aa",
+      "<cmd>ClaudeCodeAdd %<CR>",
+      vim.tbl_extend("force", d, { desc = "Add current file to context" })
+    )
+    map(
+      "n",
+      "<leader>ad",
+      "<cmd>ClaudeCodeCloseAllDiffs<CR>",
+      vim.tbl_extend("force", d, { desc = "Close pending diffs" })
+    )
     map("n", "<leader>at", "<cmd>ClaudeCodeStatus<CR>", vim.tbl_extend("force", d, { desc = "Connection status" }))
 
     map("n", "<leader>ac", function()
