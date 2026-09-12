@@ -7,7 +7,7 @@ Personal Neovim configuration for daily development. `nvim/` maps 1:1 to `~/.con
 | Layer          | Choice                                                    |
 |----------------|-----------------------------------------------------------|
 | Plugin manager | lazy.nvim — one file per plugin in `lua/plugins/`         |
-| Theme          | Rose Pine                                                 |
+| Theme          | Gruvbox                                                   |
 | Completion     | blink.cmp                                                 |
 | LSP            | mason + nvim-lspconfig (rustaceanvim for Rust)            |
 | Fuzzy finder   | Telescope                                                 |
