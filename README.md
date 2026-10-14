@@ -10,7 +10,7 @@ cd neovim-configs
 ./scripts/install.sh
 ```
 
-Handles Homebrew, Neovim, and all external dependencies. Asks before overwriting `~/.config/nvim`.
+Handles Homebrew (macOS) or dnf (Fedora), Neovim, and all external dependencies. Asks before overwriting `~/.config/nvim`.
 
 ## Structure
 
