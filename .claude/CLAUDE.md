@@ -107,7 +107,7 @@ Do not also configure `rust_analyzer` via lspconfig — duplicate server attachm
 The `main` branch is an incompatible rewrite requiring `tree-sitter-cli` as an external compiler dependency.
 
 **Treesitter: never install Neovim's bundled parsers**
-Neovim ships `c`, `lua`, `markdown`, `markdown_inline`, `query`, `vim`, `vimdoc`. Installing these via nvim-treesitter overrides them with incompatible query versions → `get_query` / `Invalid node type` errors. Check bundled parsers: `ls /opt/homebrew/Cellar/neovim/*/lib/nvim/parser/`
+Neovim ships `c`, `lua`, `markdown`, `markdown_inline`, `query`, `vim`, `vimdoc`. Installing these via nvim-treesitter overrides them with incompatible query versions → `get_query` / `Invalid node type` errors. Check bundled parsers: `ls /opt/homebrew/Cellar/neovim/*/lib/nvim/parser/` (macOS) or `ls /usr/lib64/nvim/parser/` (Fedora)
 
 **tree-sitter is a Neovim runtime dependency — never uninstall from brew**
 Neovim is dynamically linked against a specific version. Removing it breaks Neovim entirely (`dyld: Library not loaded`). Both `tree-sitter` and `tree-sitter@<version>` are in `install.sh BREW_DEPS`.

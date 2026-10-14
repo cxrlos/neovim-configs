@@ -21,8 +21,8 @@ NVIM_CONFIG="$HOME/.config/nvim"
 
 OS="unknown"
 [[ "$(uname)" == "Darwin" ]] && OS="macos"
-[[ -f /etc/arch-release ]] && OS="arch"
-[[ "$OS" == "unknown" ]] && die "Unsupported OS — targets macOS and Arch Linux."
+[[ -f /etc/fedora-release ]] && OS="fedora"
+[[ "$OS" == "unknown" ]] && die "Unsupported OS — targets macOS and Fedora."
 
 printf "\n%s\n" "${BOLD}Neovim config installer  [${OS}]${NC}"
 
@@ -58,22 +58,11 @@ _ensure_brew() {
     fi
 }
 
-_ensure_yay() {
-    command -v yay &>/dev/null && return 0
-    warn "yay (AUR helper) not found"
-    read -r -p "  Install yay? Required for AUR packages. [y/N] " yn
-    [[ "$yn" =~ ^[yY]$ ]] || return 1
-    sudo pacman -S --needed --noconfirm git base-devel
-    local tmp; tmp=$(mktemp -d)
-    git clone https://aur.archlinux.org/yay.git "$tmp/yay"
-    (cd "$tmp/yay" && makepkg -si)
-    rm -rf "$tmp"
-}
-
 # ── Dependencies ──────────────────────────────────────────────────────────────
 
 BREW_DEPS=(neovim ripgrep fd node python3 rustup-init tree-sitter tree-sitter@0.25)
-PACMAN_DEPS=(neovim ripgrep fd nodejs python rustup tree-sitter)
+# gcc/make: treesitter parsers and telescope-fzf-native compile locally
+DNF_DEPS=(neovim ripgrep fd-find nodejs npm python3 rustup gcc make)
 
 _install_deps() {
     case "$OS" in
@@ -87,17 +76,17 @@ _install_deps() {
                 fi
             done
             ;;
-        arch)
-            sudo pacman -Sy --noconfirm &>/dev/null
-            for dep in "${PACMAN_DEPS[@]}"; do
-                if pacman -Qi "$dep" &>/dev/null; then
+        fedora)
+            for dep in "${DNF_DEPS[@]}"; do
+                if rpm -q --whatprovides "$dep" &>/dev/null; then
                     ((++deps_ok))
                 else
-                    sudo pacman -S --noconfirm "$dep" &>/dev/null && ((++deps_installed)) || { warn "Failed: $dep"; ((++deps_failed)); }
+                    sudo dnf install -y "$dep" &>/dev/null && ((++deps_installed)) || { warn "Failed: $dep"; ((++deps_failed)); }
                 fi
             done
-            if ! command -v rustc &>/dev/null; then
-                rustup default stable
+            # Fedora's rustup ships only rustup-init; it installs the toolchain into ~/.cargo
+            if ! command -v rustc &>/dev/null && [[ ! -x "$HOME/.cargo/bin/rustc" ]]; then
+                rustup-init -y --no-modify-path --default-toolchain stable &>/dev/null || warn "Failed: rust toolchain"
             fi
             ;;
     esac
