@@ -28,9 +28,9 @@ for _, key in ipairs({ "n", "N", "*", "#" }) do
   vim.keymap.set("n", key, key .. "zzzv", { desc = "Search " .. key .. ", centred" })
 end
 
--- y stays inside nvim; Y is the only way to the system clipboard
-vim.keymap.set({ "n", "x" }, "Y", '"+y', { desc = "Yank to system clipboard" })
-vim.keymap.set("n", "YY", '"+yy', { desc = "Yank line to system clipboard" })
+-- y stays inside nvim; <leader>y is the only way to the system clipboard (<leader>yy = line)
+vim.keymap.set({ "n", "x" }, "<leader>y", '"+y', { desc = "Yank to system clipboard" })
+vim.keymap.set("n", "<leader>Y", '"+y$', { desc = "Yank to end of line to system clipboard" })
 
 -- Autocommands
 -- Pick up agent edits while nvim keeps focus (focus changes are already checked)
