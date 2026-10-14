@@ -15,6 +15,11 @@
       "src": "https://github.com/MunifTanjim/nui.nvim",
       "version": "0.4.0 - 0.5.0"
     },
+    "nvim-lspconfig": {
+      "rev": "4d363f93c3581b9212a24f7a830d7590b3f050af",
+      "src": "https://github.com/neovim/nvim-lspconfig",
+      "version": "2.0.0 - 3.0.0"
+    },
     "nvim-treesitter": {
       "rev": "ca581c3436fc2b236847f5b739ebc263739e5ca6",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
