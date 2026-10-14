@@ -5,10 +5,29 @@
       "src": "https://github.com/m4xshen/hardtime.nvim",
       "version": "1.0.0 - 2.0.0"
     },
+    "mini.nvim": {
+      "rev": "1345d191bb3da9c7b0e977f4387c5761f9bff68d",
+      "src": "https://github.com/nvim-mini/mini.nvim",
+      "version": "0.18.0 - 0.19.0"
+    },
     "nui.nvim": {
       "rev": "f535005e6ad1016383f24e39559833759453564e",
       "src": "https://github.com/MunifTanjim/nui.nvim",
       "version": "0.4.0 - 0.5.0"
+    },
+    "nvim-treesitter": {
+      "rev": "ca581c3436fc2b236847f5b739ebc263739e5ca6",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter",
+      "version": "'main'"
+    },
+    "nvim-treesitter-context": {
+      "rev": "8decd73460d26ef0a0befb745d022dd1fc2c38b8",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter-context"
+    },
+    "nvim-treesitter-textobjects": {
+      "rev": "5c7b0263797dfd1bd6202f2b219f3b53a80b2187",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
+      "version": "'main'"
     },
     "precognition.nvim": {
       "rev": "c3f59cdf0296ce94e7e0ff321fe1b27f5f2045c1",

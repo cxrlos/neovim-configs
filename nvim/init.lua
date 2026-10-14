@@ -64,11 +64,78 @@ vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold" }, {
 })
 
 -- Plugins: vim.pack, pinned in nvim-pack-lock.json. Update with :lua vim.pack.update()
-vim.pack.add({
-  { src = "https://github.com/MunifTanjim/nui.nvim", version = vim.version.range("0.4") }, -- :Hardtime report
-  { src = "https://github.com/m4xshen/hardtime.nvim", version = vim.version.range("1") },
-  { src = "https://github.com/tris203/precognition.nvim", version = vim.version.range("1") },
+-- Hooks first: they must exist before vim.pack.add installs or updates anything.
+vim.api.nvim_create_autocmd("PackChanged", {
+  group = vim.api.nvim_create_augroup("pack-hooks", {}),
+  desc = "Rebuild treesitter parsers when nvim-treesitter updates",
+  callback = function(ev)
+    if ev.data.spec.name == "nvim-treesitter" and ev.data.kind == "update" then
+      if not ev.data.active then
+        vim.cmd.packadd("nvim-treesitter")
+      end
+      vim.cmd("TSUpdate")
+    end
+  end,
 })
+
+local gh = function(repo) return "https://github.com/" .. repo end
+vim.pack.add({
+  { src = gh("MunifTanjim/nui.nvim"), version = vim.version.range("0.4") }, -- :Hardtime report
+  { src = gh("m4xshen/hardtime.nvim"), version = vim.version.range("1") },
+  { src = gh("tris203/precognition.nvim"), version = vim.version.range("1") },
+  { src = gh("nvim-treesitter/nvim-treesitter"), version = "main" }, -- parsers only; needs tree-sitter-cli + cc
+  { src = gh("nvim-treesitter/nvim-treesitter-textobjects"), version = "main" }, -- queries + ]m motions
+  { src = gh("nvim-treesitter/nvim-treesitter-context") }, -- only tag is 2025-05: track the branch
+  { src = gh("nvim-mini/mini.nvim"), version = vim.version.range("0.18") },
+})
+
+-- Language parsing (treesitter). Parsers nvim ships (c, lua, markdown, query, vim, vimdoc) aren't listed.
+require("nvim-treesitter").install({
+  "bash", "diff", "git_rebase", "gitcommit", "javascript", "json", "python",
+  "regex", "rust", "toml", "tsx", "typescript", "yaml",
+})
+vim.o.foldlevelstart = 99 -- files open unfolded; zc/zo/zM/zR fold by code structure
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("treesitter", {}),
+  desc = "Treesitter highlighting and folds where a parser exists",
+  callback = function(ev)
+    if pcall(vim.treesitter.start, ev.buf) then
+      vim.wo[0][0].foldmethod = "expr"
+      vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+    end
+  end,
+})
+
+-- Code text objects: af/if function, ac/ic class, au/iu call (mini.ai's default f, renamed).
+-- Next/last move to aN/iN/aL/iL so nvim's built-in an/in (grow/shrink selection) keep working.
+local ai = require("mini.ai")
+ai.setup({
+  n_lines = 500, -- search far enough to find the edges of a long function
+  custom_textobjects = {
+    f = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }),
+    c = ai.gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }),
+    u = ai.gen_spec.function_call(),
+  },
+  mappings = { around_next = "aN", inside_next = "iN", around_last = "aL", inside_last = "iL" },
+})
+
+-- ]m [m ]M [M: built-in "next method" counts braces; these use the syntax tree instead.
+-- Python's ftplugin maps them (and ]] [[) per buffer, which would win over these.
+vim.g.no_python_maps = true
+local move = require("nvim-treesitter-textobjects.move")
+for lhs, fn in pairs({
+  ["]m"] = { move.goto_next_start, "Next function start" },
+  ["[m"] = { move.goto_previous_start, "Previous function start" },
+  ["]M"] = { move.goto_next_end, "Next function end" },
+  ["[M"] = { move.goto_previous_end, "Previous function end" },
+}) do
+  vim.keymap.set({ "n", "x", "o" }, lhs, function()
+    fn[1]("@function.outer", "textobjects")
+  end, { desc = fn[2] })
+end
+
+-- Sticky context: the enclosing function/class header stays at the top while you scroll
+require("treesitter-context").setup({ max_lines = 3 })
 
 -- Habit trainer (temporary, 2-4 weeks): hints a better motion, never blocks. :Hardtime report
 -- Set up after the keymaps: it wraps whatever j/k/... maps exist when it starts.
