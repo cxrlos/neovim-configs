@@ -21,7 +21,16 @@ vim.o.virtualedit = "block"
 vim.o.expandtab = true -- fallback; editorconfig and ftplugins override
 vim.o.shiftwidth = 2
 vim.o.grepprg = "rg --vimgrep --smart-case" -- the default -uu searches ignored and hidden files
-vim.o.mouse = "" -- keyboard only (tmux and the terminal too)
+-- Mouse: the wheel scrolls, clicks and drags do nothing (same in tmux and the terminal).
+-- 'mouse' keeps its default (nvi): with it off, tmux doesn't pass the wheel in.
+for _, mod in ipairs({ "", "2-", "3-", "4-", "C-", "S-", "A-" }) do
+  for _, button in ipairs({ "Left", "Right", "Middle", "X1", "X2" }) do
+    for _, event in ipairs({ "Mouse", "Drag", "Release" }) do
+      local lhs = "<" .. mod .. button .. event .. ">"
+      vim.keymap.set({ "n", "x", "o", "i" }, lhs, "<Nop>", { desc = "Mouse clicks are off" })
+    end
+  end
+end
 
 -- Keymaps
 -- Counted j/k (e.g. 12j) go into the jumplist, so <C-o> comes back
