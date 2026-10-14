@@ -1,0 +1,19 @@
+{
+  "plugins": {
+    "hardtime.nvim": {
+      "rev": "721a75b9a0c2eb1fb811d34507708ee315cb04eb",
+      "src": "https://github.com/m4xshen/hardtime.nvim",
+      "version": "1.0.0 - 2.0.0"
+    },
+    "nui.nvim": {
+      "rev": "f535005e6ad1016383f24e39559833759453564e",
+      "src": "https://github.com/MunifTanjim/nui.nvim",
+      "version": "0.4.0 - 0.5.0"
+    },
+    "precognition.nvim": {
+      "rev": "c3f59cdf0296ce94e7e0ff321fe1b27f5f2045c1",
+      "src": "https://github.com/tris203/precognition.nvim",
+      "version": "1.0.0 - 2.0.0"
+    }
+  }
+}
