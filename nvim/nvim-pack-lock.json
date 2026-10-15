@@ -1,8 +1,18 @@
 {
   "plugins": {
+    "diffview-plus.nvim": {
+      "rev": "2a2d89a07f5d5d3cef7f542b99c3e28050ca205c",
+      "src": "https://github.com/dlyongemallo/diffview-plus.nvim",
+      "version": "'v0.39'"
+    },
     "fzf-lua": {
       "rev": "3868dcc78d2c2766c9510ab18b6d3815071b389e",
       "src": "https://github.com/ibhagwan/fzf-lua"
+    },
+    "gitsigns.nvim": {
+      "rev": "a462f416e2ce4744531c6256252dee99a7d34a83",
+      "src": "https://github.com/lewis6991/gitsigns.nvim",
+      "version": "2.0.0 - 3.0.0"
     },
     "hardtime.nvim": {
       "rev": "721a75b9a0c2eb1fb811d34507708ee315cb04eb",
@@ -13,6 +23,10 @@
       "rev": "1345d191bb3da9c7b0e977f4387c5761f9bff68d",
       "src": "https://github.com/nvim-mini/mini.nvim",
       "version": "0.18.0 - 0.19.0"
+    },
+    "neogit": {
+      "rev": "a6549816e62cec7037f1549d8f1659d45635370c",
+      "src": "https://github.com/NeogitOrg/neogit"
     },
     "nui.nvim": {
       "rev": "f535005e6ad1016383f24e39559833759453564e",
