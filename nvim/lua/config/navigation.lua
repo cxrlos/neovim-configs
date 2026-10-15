@@ -52,3 +52,51 @@ vim.keymap.set("n", "-", "<Cmd>Oil<CR>", { desc = "Open the parent directory (oi
 vim.keymap.set("n", "<leader>bd", function()
   require("mini.bufremove").delete()
 end, { desc = "Delete the buffer, keep the window" })
+
+-- Git status in oil: changed entries get their `git status -s` flags at the end of the line.
+-- Green = staged (reviewed), yellow = still to review, ?? = untracked, red = deleted; a folder gets
+-- • when something inside changed. Own code: the oil git plugins are small one-person projects.
+local oil_git = vim.api.nvim_create_namespace("oil-git-status")
+local function oil_git_status(buf)
+  local dir = vim.api.nvim_buf_is_valid(buf) and require("oil").get_current_dir(buf)
+  if not dir then return end
+  local prefix = vim.system({ "git", "-C", dir, "rev-parse", "--show-prefix" }, { text = true }):wait()
+  if prefix.code ~= 0 then return end -- not in a git repo
+  prefix = vim.trim(prefix.stdout)
+  vim.system({ "git", "-C", dir, "status", "--porcelain", "--untracked-files=all", "--", "." }, { text = true },
+    vim.schedule_wrap(function(res)
+      if res.code ~= 0 or not vim.api.nvim_buf_is_valid(buf) then return end
+      local marks = {}
+      for line in vim.gsplit(res.stdout, "\n", { trimempty = true }) do
+        local xy, path = line:sub(1, 2), line:sub(4):gsub("^.* %-> ", "")
+        local name, rest = path:sub(#prefix + 1):match("^([^/]+)(.*)$")
+        if name then
+          local hl = (xy == "??" or xy:sub(2) ~= " ") and "Changed" or "Added"
+          if xy:find("D") then hl = "Removed" end
+          marks[name] = rest == "" and { vim.trim(xy), hl } or marks[name] or { "•", "Changed" }
+        end
+      end
+      vim.api.nvim_buf_clear_namespace(buf, oil_git, 0, -1)
+      for lnum = 1, vim.api.nvim_buf_line_count(buf) do
+        local entry = require("oil").get_entry_on_line(buf, lnum)
+        local mark = entry and marks[entry.name]
+        if mark then
+          vim.api.nvim_buf_set_extmark(buf, oil_git, lnum - 1, 0, { virt_text = { { " " .. mark[1], mark[2] } } })
+        end
+      end
+    end))
+end
+local oil_group = vim.api.nvim_create_augroup("oil-git-status", {})
+vim.api.nvim_create_autocmd("User", {
+  group = oil_group,
+  pattern = { "OilEnter", "OilMutationComplete" },
+  desc = "Git status flags in oil",
+  callback = function(ev) oil_git_status(ev.data and ev.data.buf or vim.api.nvim_get_current_buf()) end,
+})
+vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "TextChanged" }, {
+  group = oil_group,
+  desc = "Refresh git status flags in oil",
+  callback = function(ev)
+    if vim.bo[ev.buf].filetype == "oil" then oil_git_status(ev.buf) end
+  end,
+})
