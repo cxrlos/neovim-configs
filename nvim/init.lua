@@ -240,6 +240,14 @@ vim.lsp.config("jsonls", {
     },
   },
 })
+-- Completion: nvim's own. The menu opens as you type (words from open buffers, plus the language
+-- server where one is attached). <C-n>/<C-p> move, <C-y> accepts (only <C-y> applies auto-imports
+-- and snippets), <C-e> closes. <Tab>/<S-Tab> jump through snippet fields. No auto-pairs.
+vim.o.autocomplete = true
+vim.o.complete = ".^5,w^3,b^3" -- buffer words, capped; the LSP source is added per buffer below
+vim.o.completeopt = "menuone,noselect,popup,fuzzy"
+vim.o.pumheight = 10
+
 -- eslint and biome attach only where their config file exists
 vim.lsp.enable({
   "ts_ls", "html", "cssls", "jsonls", "eslint", "biome",
@@ -248,11 +256,18 @@ vim.lsp.enable({
 
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("lsp-attach", {}),
-  desc = "LSP: gd, ruff hover off, highlight the symbol under the cursor",
+  desc = "LSP: completion source, gd, ruff hover off, symbol highlight",
   callback = function(ev)
     local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
     if client.name == "ruff" then
       client.server_capabilities.hoverProvider = false -- basedpyright owns hover
+    end
+    if client:supports_method("textDocument/completion") then
+      -- The server feeds the omnifunc; 'autocomplete' does the triggering (one trigger owner)
+      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = false })
+      if not vim.bo[ev.buf].complete:find("^o") then
+        vim.bo[ev.buf].complete = "o," .. vim.bo[ev.buf].complete
+      end
     end
     if client:supports_method("textDocument/definition") then
       vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = ev.buf, desc = "Go to definition (LSP)" })
