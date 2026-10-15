@@ -39,9 +39,9 @@
       "version": "'main'"
     },
     "oil.nvim": {
-      "rev": "17c0a8faaf48298a0c0cfb0d757c0eaee4ff7a32",
+      "rev": "d3733d933833a0e59b813ecec99341527adf0c28",
       "src": "https://github.com/stevearc/oil.nvim",
-      "version": "2.0.0 - 3.0.0"
+      "version": "'master'"
     },
     "precognition.nvim": {
       "rev": "c3f59cdf0296ce94e7e0ff321fe1b27f5f2045c1",
