@@ -1,10 +1,11 @@
 -- Language parsing: treesitter, function motions, sticky context
 
 -- Language parsing (treesitter). Parsers nvim ships (c, lua, markdown, query, vim, vimdoc) aren't listed.
-require("nvim-treesitter").install({
+local parsers = {
   "bash", "css", "diff", "git_rebase", "gitcommit", "hcl", "html", "javascript", "jsdoc", "json",
   "python", "regex", "rust", "scss", "terraform", "toml", "tsx", "typescript", "yaml",
-})
+}
+require("nvim-treesitter").install(parsers) -- async; install.sh waits for it on a fresh machine
 vim.o.foldlevelstart = 99 -- files open unfolded; zc/zo/zM/zR fold by code structure
 vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("treesitter", {}),
@@ -34,3 +35,5 @@ end
 
 -- Sticky context: the enclosing function/class header stays at the top while you scroll
 require("treesitter-context").setup({ max_lines = 3 })
+
+return { parsers = parsers } -- for install.sh

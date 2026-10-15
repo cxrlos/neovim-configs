@@ -18,16 +18,16 @@ AGENTS.md for the workflow map: tmux owns sessions, gh owns PRs, agents edit fil
 | `nvim/lua/config/format.lua` | conform (`<leader>f`; format-on-save opt-in) |
 | `nvim/lua/config/habits.lua` | hardtime (hint mode) and precognition: temporary, remove once habits stick |
 | `nvim/lua/config/keyhints.lua` | mini.clue. Must stay last: its triggers go after every mapping |
+| `install.sh` | Checks tools, links `~/.config/nvim`, installs plugins and parsers (`--check` reports only) |
 | `nvim/nvim-pack-lock.json` | Plugin lockfile (vim.pack). Commit it with any plugin change |
 
 ## Install
 Tools (language servers, formatters, tree-sitter-cli) come from term-configs `install.sh`
-(Fedora: dnf, pinned npm, pinned binaries; macOS: Brewfile). Then link this config:
-
-    ln -sfn "$PWD/nvim" ~/.config/nvim
-
-The first start installs the plugins at the lockfile's commits and builds the parsers.
-Rust also needs `rustup component add rust-analyzer`.
+(Fedora: dnf, pinned npm, pinned binaries; macOS: Brewfile). Then `./install.sh` (macOS and
+Linux, bash 3.2-safe; `--check` reports only): checks the tools, links `~/.config/nvim` (a real
+config there is moved aside), installs the plugins at the lockfile's commits and waits for the
+parsers (the list lives in `lua/config/parsing.lua`, which returns it). Rust also needs
+`rustup component add rust-analyzer`.
 
 ## Rules
 - **Defaults first.** Check `:h vim_diff` / `:h news` before setting an option; never restate a
