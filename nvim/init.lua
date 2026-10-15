@@ -63,6 +63,35 @@ vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold" }, {
   end,
 })
 
+-- Reopen files where you left off (not commit messages or rebase todos)
+vim.api.nvim_create_autocmd("BufReadPost", {
+  group = vim.api.nvim_create_augroup("last-position", {}),
+  desc = "Jump to the last cursor position",
+  callback = function(ev)
+    local ft = vim.filetype.match({ buf = ev.buf }) or ""
+    if ft == "gitcommit" or ft == "gitrebase" then
+      return
+    end
+    local mark = vim.api.nvim_buf_get_mark(ev.buf, '"')
+    if mark[1] > 0 and mark[1] <= vim.api.nvim_buf_line_count(ev.buf) then
+      pcall(vim.api.nvim_win_set_cursor, 0, mark)
+    end
+  end,
+})
+
+-- Spell check prose (]s [s next/previous error, z= suggestions, zg add word); <leader>ts toggles
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("spell", {}),
+  pattern = { "markdown", "gitcommit" },
+  desc = "Spell check prose",
+  callback = function()
+    vim.wo[0][0].spell = true
+  end,
+})
+vim.keymap.set("n", "<leader>ts", function()
+  vim.wo.spell = not vim.wo.spell
+end, { desc = "Toggle spell check" })
+
 -- Plugins: vim.pack, pinned in nvim-pack-lock.json. Update with :lua vim.pack.update()
 -- Hooks first: they must exist before vim.pack.add installs or updates anything.
 vim.api.nvim_create_autocmd("PackChanged", {
@@ -121,6 +150,14 @@ ai.setup({
   },
   mappings = { around_next = "aN", inside_next = "iN", around_last = "aL", inside_last = "iL" },
 })
+
+-- Surround: sa add (saiw" quotes a word), sd delete (sd"), sr replace (sr"'), sf/sh find/highlight.
+-- Plain s waits a moment for these; use cl for the built-in s.
+require("mini.surround").setup()
+
+-- Indent text objects: ii / ai = this indentation block (Python, YAML), [i ]i its edges.
+-- Never drawn: only the text objects and motions are wanted.
+require("mini.indentscope").setup({ draw = { predicate = function() return false end } })
 
 -- ]m [m ]M [M: built-in "next method" counts braces; these use the syntax tree instead.
 -- Python's ftplugin maps them (and ]] [[) per buffer, which would win over these.
@@ -270,3 +307,6 @@ require("oil").setup({
   },
 })
 vim.keymap.set("n", "-", "<Cmd>Oil<CR>", { desc = "Open the parent directory (oil)" })
+vim.keymap.set("n", "<leader>bd", function()
+  require("mini.bufremove").delete()
+end, { desc = "Delete the buffer, keep the window" })
