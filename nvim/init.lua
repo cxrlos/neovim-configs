@@ -190,6 +190,19 @@ vim.pack.add({
   { src = gh("dlyongemallo/diffview-plus.nvim"), version = "v0.39" }, -- v2.16 lacks the big-delete crash fix; pin "3" once tagged
 })
 
+-- Untrusted checkouts (term-configs `wt pr`, listed one path per line in $XDG_STATE_HOME/wt/untrusted):
+-- no language servers or formatters, which could run the checkout's own tools (node_modules/.bin,
+-- build scripts, proc macros). Parsing, picker, git review and the rest work as usual.
+do
+  local cwd, list = vim.fn.getcwd(), (vim.env.XDG_STATE_HOME or vim.env.HOME .. "/.local/state") .. "/wt/untrusted"
+  for path in (vim.uv.fs_stat(list) and io.lines(list) or function() end) do
+    if path ~= "" and (cwd == path or vim.startswith(cwd, path .. "/")) then vim.g.untrusted = true end
+  end
+  if vim.g.untrusted then
+    vim.schedule(function() vim.notify("untrusted checkout: language servers and formatters are off", vim.log.levels.WARN) end)
+  end
+end
+
 -- One file per area (lua/config/), in this order: keyhints must stay last.
 require("config.look")
 require("config.parsing")

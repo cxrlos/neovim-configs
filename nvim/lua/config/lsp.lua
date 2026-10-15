@@ -40,11 +40,13 @@ vim.o.complete = ".^5,w^3,b^3" -- buffer words, capped; the LSP source is added 
 vim.o.completeopt = "menuone,noselect,popup,fuzzy"
 vim.o.pumheight = 10
 
--- eslint and biome attach only where their config file exists
-vim.lsp.enable({
-  "ts_ls", "html", "cssls", "jsonls", "eslint", "biome",
-  "basedpyright", "ruff", "rust_analyzer", "lua_ls", "terraformls", "marksman", "bashls", "yamlls",
-})
+-- eslint and biome attach only where their config file exists. None in untrusted checkouts.
+if not vim.g.untrusted then
+  vim.lsp.enable({
+    "ts_ls", "html", "cssls", "jsonls", "eslint", "biome",
+    "basedpyright", "ruff", "rust_analyzer", "lua_ls", "terraformls", "marksman", "bashls", "yamlls",
+  })
+end
 
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("lsp-attach", {}),
