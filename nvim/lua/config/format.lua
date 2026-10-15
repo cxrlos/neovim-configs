@@ -4,7 +4,7 @@
 -- when it has one (node_modules/.bin), else the installed one; LSP formatting only as a fallback.
 -- Format-on-save is opt-in per project: a direnv-allowed .envrc exporting NVIM_FORMAT_ON_SAVE=1
 -- (otherwise a repo's own prettier would run on every save). <leader>tf toggles it for the session.
-vim.g.format_on_save = vim.env.NVIM_FORMAT_ON_SAVE == "1"
+vim.g.format_on_save = vim.env.NVIM_FORMAT_ON_SAVE == "1" and not vim.g.untrusted
 local web = { "biome", "prettier", stop_after_first = true } -- biome only with a biome.json
 require("conform").setup({
   formatters_by_ft = {
@@ -34,9 +34,11 @@ require("conform").setup({
   end,
 })
 vim.keymap.set({ "n", "x" }, "<leader>f", function()
+  if vim.g.untrusted then return vim.notify("untrusted checkout: formatters are off") end
   require("conform").format({ async = true })
 end, { desc = "Format the buffer / selection" })
 vim.keymap.set("n", "<leader>tf", function()
+  if vim.g.untrusted then return vim.notify("untrusted checkout: formatters are off") end
   vim.g.format_on_save = not vim.g.format_on_save
   vim.notify("format on save: " .. (vim.g.format_on_save and "on" or "off"))
 end, { desc = "Toggle format on save" })
