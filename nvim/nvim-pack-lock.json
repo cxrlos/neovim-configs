@@ -1,5 +1,9 @@
 {
   "plugins": {
+    "fzf-lua": {
+      "rev": "3868dcc78d2c2766c9510ab18b6d3815071b389e",
+      "src": "https://github.com/ibhagwan/fzf-lua"
+    },
     "hardtime.nvim": {
       "rev": "721a75b9a0c2eb1fb811d34507708ee315cb04eb",
       "src": "https://github.com/m4xshen/hardtime.nvim",
@@ -33,6 +37,11 @@
       "rev": "5c7b0263797dfd1bd6202f2b219f3b53a80b2187",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
       "version": "'main'"
+    },
+    "oil.nvim": {
+      "rev": "17c0a8faaf48298a0c0cfb0d757c0eaee4ff7a32",
+      "src": "https://github.com/stevearc/oil.nvim",
+      "version": "2.0.0 - 3.0.0"
     },
     "precognition.nvim": {
       "rev": "c3f59cdf0296ce94e7e0ff321fe1b27f5f2045c1",

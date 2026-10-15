@@ -88,6 +88,8 @@ vim.pack.add({
   { src = gh("nvim-treesitter/nvim-treesitter-context") }, -- only tag is 2025-05: track the branch
   { src = gh("nvim-mini/mini.nvim"), version = vim.version.range("0.18") },
   { src = gh("neovim/nvim-lspconfig"), version = vim.version.range("2") }, -- server configs (lsp/*.lua) only
+  { src = gh("ibhagwan/fzf-lua") }, -- no release tags: track main (the lockfile pins the commit)
+  { src = gh("stevearc/oil.nvim"), version = vim.version.range("2") },
 })
 
 -- Language parsing (treesitter). Parsers nvim ships (c, lua, markdown, query, vim, vimdoc) aren't listed.
@@ -218,3 +220,27 @@ vim.keymap.set("n", "<leader>td", function()
   vim.diagnostic.config({ virtual_lines = not full and { current_line = true }, virtual_text = full and inline })
 end, { desc = "Toggle full diagnostic messages" })
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Diagnostics to the location list" })
+
+-- Navigation. fzf-lua runs the system fzf/rg/fd and inherits FZF_DEFAULT_OPTS (colours);
+-- file search skips hidden and gitignored files. oil edits a directory like a buffer.
+require("mini.icons").setup() -- file icons for fzf-lua and oil (Nerd Font)
+local fzf = require("fzf-lua")
+fzf.setup({})
+local pick = function(lhs, fn, desc, mode)
+  vim.keymap.set(mode or "n", lhs, fn, { desc = desc })
+end
+pick("<leader><leader>", fzf.buffers, "Pick an open buffer")
+pick("<leader>sf", fzf.files, "Search files")
+pick("<leader>sg", fzf.live_grep, "Search by grep (live)")
+pick("<leader>sw", fzf.grep_cword, "Search the word under the cursor")
+pick("<leader>sw", fzf.grep_visual, "Search the selection", "x")
+pick("<leader>s/", fzf.blines, "Search lines in this buffer")
+pick("<leader>so", fzf.oldfiles, "Search recent files")
+pick("<leader>sr", fzf.resume, "Resume the last search")
+pick("<leader>ss", fzf.lsp_live_workspace_symbols, "Search symbols in the project (LSP)")
+pick("<leader>sd", fzf.diagnostics_workspace, "Search diagnostics in the project")
+pick("<leader>sh", fzf.helptags, "Search help")
+pick("<leader>sk", fzf.keymaps, "Search keymaps")
+
+require("oil").setup({ watch_for_changes = true }) -- files the agent creates show up
+vim.keymap.set("n", "-", "<Cmd>Oil<CR>", { desc = "Open the parent directory (oil)" })
