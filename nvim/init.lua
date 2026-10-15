@@ -222,7 +222,8 @@ end, { desc = "Toggle full diagnostic messages" })
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Diagnostics to the location list" })
 
 -- Navigation. fzf-lua runs the system fzf/rg/fd and inherits FZF_DEFAULT_OPTS (colours);
--- file search skips hidden and gitignored files. oil edits a directory like a buffer.
+-- files shows dotfiles but skips gitignored ones; grep skips both. In a picker: alt-h toggles
+-- hidden, alt-i ignored files. oil edits a directory like a buffer.
 require("mini.icons").setup() -- file icons for fzf-lua and oil (Nerd Font)
 local fzf = require("fzf-lua")
 fzf.setup({})
