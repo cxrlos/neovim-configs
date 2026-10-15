@@ -1,0 +1,81 @@
+{
+  "plugins": {
+    "conform.nvim": {
+      "rev": "3543d000dafbc41cc7761d860cfdb24e82154f75",
+      "src": "https://github.com/stevearc/conform.nvim",
+      "version": "9.0.0 - 10.0.0"
+    },
+    "diffview-plus.nvim": {
+      "rev": "2a2d89a07f5d5d3cef7f542b99c3e28050ca205c",
+      "src": "https://github.com/dlyongemallo/diffview-plus.nvim",
+      "version": "'v0.39'"
+    },
+    "fzf-lua": {
+      "rev": "3868dcc78d2c2766c9510ab18b6d3815071b389e",
+      "src": "https://github.com/ibhagwan/fzf-lua"
+    },
+    "gitsigns.nvim": {
+      "rev": "a462f416e2ce4744531c6256252dee99a7d34a83",
+      "src": "https://github.com/lewis6991/gitsigns.nvim",
+      "version": "2.0.0 - 3.0.0"
+    },
+    "hardtime.nvim": {
+      "rev": "721a75b9a0c2eb1fb811d34507708ee315cb04eb",
+      "src": "https://github.com/m4xshen/hardtime.nvim",
+      "version": "1.0.0 - 2.0.0"
+    },
+    "mini.nvim": {
+      "rev": "1345d191bb3da9c7b0e977f4387c5761f9bff68d",
+      "src": "https://github.com/nvim-mini/mini.nvim",
+      "version": "0.18.0 - 0.19.0"
+    },
+    "neogit": {
+      "rev": "a6549816e62cec7037f1549d8f1659d45635370c",
+      "src": "https://github.com/NeogitOrg/neogit"
+    },
+    "nui.nvim": {
+      "rev": "f535005e6ad1016383f24e39559833759453564e",
+      "src": "https://github.com/MunifTanjim/nui.nvim",
+      "version": "0.4.0 - 0.5.0"
+    },
+    "nvim-lspconfig": {
+      "rev": "4d363f93c3581b9212a24f7a830d7590b3f050af",
+      "src": "https://github.com/neovim/nvim-lspconfig",
+      "version": "2.0.0 - 3.0.0"
+    },
+    "nvim-treesitter": {
+      "rev": "ca581c3436fc2b236847f5b739ebc263739e5ca6",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter",
+      "version": "'main'"
+    },
+    "nvim-treesitter-context": {
+      "rev": "8decd73460d26ef0a0befb745d022dd1fc2c38b8",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter-context"
+    },
+    "nvim-treesitter-textobjects": {
+      "rev": "5c7b0263797dfd1bd6202f2b219f3b53a80b2187",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
+      "version": "'main'"
+    },
+    "oil.nvim": {
+      "rev": "d3733d933833a0e59b813ecec99341527adf0c28",
+      "src": "https://github.com/stevearc/oil.nvim",
+      "version": "'master'"
+    },
+    "precognition.nvim": {
+      "rev": "c3f59cdf0296ce94e7e0ff321fe1b27f5f2045c1",
+      "src": "https://github.com/tris203/precognition.nvim",
+      "version": "1.0.0 - 2.0.0"
+    },
+    "render-markdown.nvim": {
+      "rev": "640a3ec6d538bad17c328be373c7cad0293d9589",
+      "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim",
+      "version": "8.0.0 - 9.0.0"
+    },
+    "tokyonight.nvim": {
+      "rev": "545d72cde6400835d895160ecb5853874fd5156d",
+      "src": "https://github.com/folke/tokyonight.nvim",
+      "version": "4.0.0 - 5.0.0"
+    }
+  }
+}

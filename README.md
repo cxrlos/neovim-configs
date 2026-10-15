@@ -1,27 +1,12 @@
-# Neovim Configuration
+# neovim-configs
 
-Personal Neovim setup for Rust, TypeScript/React, Python, Terraform, and Lua. Gruvbox, Telescope, Harpoon, blink.cmp, mason + lspconfig.
+Neovim 0.12 config, rebuilt from defaults in 2026: `vim.pack` with a lockfile, built-in LSP and
+completion, treesitter, fzf-lua, oil, gitsigns + Neogit + diffview, conform, Tokyo Night.
+Made for reviewing code an agent writes in a neighbouring tmux window.
 
-## Install
+Install the tools with [term-configs](https://github.com/cxrlos/term-configs) `install.sh`, then:
 
-```bash
-git clone https://github.com/cxrlos/neovim-configs.git
-cd neovim-configs
-./scripts/install.sh
-```
+    ln -sfn "$PWD/nvim" ~/.config/nvim
 
-Handles Homebrew (macOS) or dnf (Fedora), Neovim, and all external dependencies. Asks before overwriting `~/.config/nvim`.
-
-## Structure
-
-```
-nvim/
-├── init.lua              entry point, leader key, lazy.nvim bootstrap
-├── lua/
-│   ├── config/           options, keymaps, autocmds, shared constants, cheatsheet
-│   ├── plugins/          one spec file per plugin
-│   └── lsp/              shared on_attach, diagnostics, per-server configs
-└── docs/                 per-topic cheatsheet files
-```
-
-Press `?` inside Neovim for a searchable keybinding picker. See `nvim/docs/` for per-topic docs.
+Keys: press `<Space>` and wait for the hint window, or `<Space>sk` to search every mapping.
+Layout and rules: [AGENTS.md](AGENTS.md).
