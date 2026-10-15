@@ -54,6 +54,28 @@ for key, dir in pairs({ h = "L", j = "D", k = "U", l = "R" }) do
   end, { desc = "Focus the split or tmux pane " .. ({ h = "left", j = "below", k = "above", l = "right" })[key] })
 end
 
+-- Ctrl+Shift+h/j/k/l: move the split's border left/down/up/right (like tmux prefix H/J/K/L); a
+-- count moves further. With no split on that axis, resize the tmux pane instead. The terminal
+-- sends these as CSI u codes (term-configs alacritty.toml / ghostty), tmux passes them through.
+for key, dir in pairs({ h = "L", j = "D", k = "U", l = "R" }) do
+  vim.keymap.set("n", "<C-S-" .. key .. ">", function()
+    local vertical = key == "h" or key == "l"
+    local cells = vim.v.count1 * (vertical and 3 or 2)
+    local cur = vim.fn.winnr()
+    local after = vim.fn.winnr(vertical and "l" or "j") -- neighbour right / below
+    local before = vim.fn.winnr(vertical and "h" or "k") -- neighbour left / above
+    if after == cur and before == cur then
+      if vim.env.TMUX then vim.system({ "tmux", "resize-pane", "-" .. dir, tostring(cells) }) end
+      return
+    end
+    -- Moving the right/bottom border out grows this split; with no neighbour there, the border
+    -- that moves is the left/top one, so the same key shrinks it
+    local grow = key == "l" or key == "j"
+    if after == cur then grow = not grow end
+    vim.cmd((vertical and "vertical " or "") .. "resize " .. (grow and "+" or "-") .. cells)
+  end, { desc = "Move the split border " .. ({ h = "left", j = "down", k = "up", l = "right" })[key] })
+end
+
 -- Search jumps land mid-screen (zv opens a fold over the match)
 for _, key in ipairs({ "n", "N", "*", "#" }) do
   vim.keymap.set("n", key, key .. "zzzv", { desc = "Search " .. key .. ", centred" })
