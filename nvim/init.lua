@@ -118,8 +118,29 @@ vim.pack.add({
   { src = gh("nvim-mini/mini.nvim"), version = vim.version.range("0.18") },
   { src = gh("neovim/nvim-lspconfig"), version = vim.version.range("2") }, -- server configs (lsp/*.lua) only
   { src = gh("ibhagwan/fzf-lua") }, -- no release tags: track main (the lockfile pins the commit)
+  { src = gh("folke/tokyonight.nvim"), version = vim.version.range("4") },
+  { src = gh("MeanderingProgrammer/render-markdown.nvim"), version = vim.version.range("8") },
   { src = gh("stevearc/oil.nvim"), version = "master" }, -- v2.16 lacks the big-delete crash fix; pin "3" once tagged
 })
+
+-- Look: Tokyo Night (night), like Alacritty, tmux, fzf and delta. Without lazy.nvim it would
+-- style every plugin it knows; list only the ones in use (add gitsigns/neogit with the git batch).
+require("tokyonight").setup({
+  style = "night",
+  plugins = {
+    all = false,
+    ["fzf-lua"] = true,
+    ["mini.icons"] = true,
+    ["mini.surround"] = true,
+    ["nvim-treesitter-context"] = true,
+    ["render-markdown.nvim"] = true,
+  },
+})
+vim.cmd.colorscheme("tokyonight")
+
+-- Markdown renders in the buffer (headings, tables, checkboxes, code); the cursor line shows the
+-- raw text, and insert mode shows it all. No browser, no server.
+require("render-markdown").setup({ latex = { enabled = false } }) -- no LaTeX toolchain (skipped)
 
 -- Language parsing (treesitter). Parsers nvim ships (c, lua, markdown, query, vim, vimdoc) aren't listed.
 require("nvim-treesitter").install({
