@@ -42,6 +42,18 @@ end
 
 vim.keymap.set("n", "<Esc>", "<Cmd>nohlsearch<CR><Esc>", { desc = "Clear search highlight" })
 
+-- Ctrl+h/j/k/l: move between splits; at the edge, on to the next tmux pane (tmux.conf sends these
+-- keys to nvim). A zoomed tmux pane stays put.
+for key, dir in pairs({ h = "L", j = "D", k = "U", l = "R" }) do
+  vim.keymap.set("n", "<C-" .. key .. ">", function()
+    local win = vim.api.nvim_get_current_win()
+    vim.cmd.wincmd(key)
+    if vim.api.nvim_get_current_win() == win and vim.env.TMUX then
+      vim.system({ "tmux", "if-shell", "-F", "#{window_zoomed_flag}", "", "select-pane -" .. dir })
+    end
+  end, { desc = "Focus the split or tmux pane " .. ({ h = "left", j = "below", k = "above", l = "right" })[key] })
+end
+
 -- Search jumps land mid-screen (zv opens a fold over the match)
 for _, key in ipairs({ "n", "N", "*", "#" }) do
   vim.keymap.set("n", key, key .. "zzzv", { desc = "Search " .. key .. ", centred" })
